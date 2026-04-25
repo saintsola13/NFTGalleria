@@ -73,7 +73,8 @@ function marketplaceUrl(chain, contract, tokenId) {
     return `https://opensea.io/assets/ethereum/${contract}/${tokenId}`;
   }
   if (chain === "apechain") {
-    return `https://magiceden.io/collections/apechain/${contract}/${tokenId}`;
+    // ApeChain trades on OpenSea
+    return `https://opensea.io/assets/ape_chain/${contract}/${tokenId}`;
   }
   if (chain === "solana") {
     // For Solana, contract here is actually the token mint address.
@@ -84,7 +85,6 @@ function marketplaceUrl(chain, contract, tokenId) {
 
 function marketplaceLabel(chain) {
   if (chain === "solana") return "VIEW ON MAGIC EDEN";
-  if (chain === "apechain") return "VIEW ON MAGIC EDEN";
   return "VIEW ON OPENSEA";
 }
 

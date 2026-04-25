@@ -33,15 +33,15 @@ export const ETHEREUM = [
 ];
 
 export const APECHAIN = [
-  // NOTE: ApeChain is newer — a few of these are placeholder names. We'll
-  // verify and tighten this list once the page lights up.
-  { name: "Bored Ape Yacht Club",       contract: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d" },
-  { name: "Mutant Ape Yacht Club",      contract: "0x60e4d786628fea6478f785a6d7e704777c86a7c6" },
-  { name: "Saints of LA",               contract: "0x0000000000000000000000000000000000000000" }, // TODO: real Saints contract on Ape
-  { name: "Chumpz",                     contract: "0x0000000000000000000000000000000000000000" }, // TODO: real Chumpz contract on Ape
-  { name: "Otherdeed Expanded",         contract: "0x0000000000000000000000000000000000000000" }, // TODO
-  { name: "Gs on Ape",                  contract: "0x0000000000000000000000000000000000000000" }, // TODO
-  { name: "ApeChain Genesis",           contract: "0x0000000000000000000000000000000000000000" }, // TODO
+  // Sola-supplied ApeChain contracts — names will be filled in by bake step
+  // once Alchemy's ApeChain network is enabled on the account.
+  { name: "ApeChain #1", contract: "0xb3443b6bd585ba4118cae2bedb61c7ec4a8281df" },
+  { name: "ApeChain #2", contract: "0x64688e9e0f69631b347f749c2f9b445201af5498" },
+  { name: "ApeChain #3", contract: "0xbe0c4f7aef79e41463bcd4e20c66fda4e35a5a19" },
+  { name: "ApeChain #4", contract: "0xd33edec311f8769c71f132a77f0c0796c22af1c5" },
+  { name: "ApeChain #5", contract: "0xa9a1d086623475595a02991664742e4a1cbafcb8" },
+  { name: "ApeChain #6", contract: "0x3569347d4186557c51ace5894bdd02366cf027b3" },
+  { name: "ApeChain #7", contract: "0x0178a9d0b0cba1b2ede3afdb6dd021db24ff4240" },
 ];
 
 export const SOLANA = [

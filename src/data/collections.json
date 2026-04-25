@@ -153,15 +153,45 @@
   ],
   "apechain": [
     {
-      "id": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
-      "name": "Bored Ape Yacht Club",
-      "pfp": null,
+      "id": "0xb3443B6Bd585ba4118CaE2beDb61c7EC4a8281Df",
+      "name": "Gs on Ape",
+      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/58e061b5f6a61e318f53c6de24873ecf",
       "chain": "apechain"
     },
     {
-      "id": "0x60e4d786628fea6478f785a6d7e704777c86a7c6",
-      "name": "Mutant Ape Yacht Club",
-      "pfp": null,
+      "id": "0x64688E9E0f69631b347f749c2f9B445201aF5498",
+      "name": "Monos",
+      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/64ef800781bf583a132ad0f705418f5d",
+      "chain": "apechain"
+    },
+    {
+      "id": "0xbe0c4F7aEF79e41463bcd4e20c66FdA4e35A5a19",
+      "name": "Hop_Starz",
+      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/e84d5cc67d6b713f027199b087630896",
+      "chain": "apechain"
+    },
+    {
+      "id": "0xd33edeC311f8769c71f132A77F0c0796c22AF1c5",
+      "name": "TokenGators",
+      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/8a5e090ca62b4dc4ede7d4696f1ce160",
+      "chain": "apechain"
+    },
+    {
+      "id": "0xa9a1d086623475595A02991664742E4A1cbAFcb8",
+      "name": "Chumpz by Saints of LA",
+      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/0814b371a40458f3a0ba910aa2cb5dd5",
+      "chain": "apechain"
+    },
+    {
+      "id": "0x3569347d4186557C51ACe5894bdD02366CF027B3",
+      "name": "Wrapped Lil Mutants",
+      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/b02d878d227bb6cb1766456806ced680",
+      "chain": "apechain"
+    },
+    {
+      "id": "0x0178A9d0b0CBa1B2Ede3AFDb6dd021dB24fF4240",
+      "name": "forever-undead",
+      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/1da377f09d41f23a8f9c31fff616b194",
       "chain": "apechain"
     }
   ],
@@ -317,5 +347,5 @@
       "chain": "solana"
     }
   ],
-  "builtAt": "2026-04-25T20:35:16.080Z"
+  "builtAt": "2026-04-25T21:12:05.232Z"
 }
