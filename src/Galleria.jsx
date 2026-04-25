@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { ETHEREUM, APECHAIN, SOLANA } from "./curated.js";
+import baked from "./data/collections.json";
 
 // ─────────────────────────────────────────────────────────────
 //  NFT GALLERIA  —  Top 25 × 3 Chains
@@ -45,54 +46,10 @@ function cacheSet(key, v) {
 }
 
 // ─── Reservoir fetchers (proxied) ───────────────────────────
-async function fetchOneCollection(chain, item) {
-  // For ETH/Ape we have `contract`; for Solana we have `symbol`.
-  const id = item.contract || item.symbol;
-  if (!id || id === "0x0000000000000000000000000000000000000000") {
-    // Skip placeholder entries until they're filled in.
-    return null;
-  }
-  const k = `col:${chain}:${id}`;
-  const cached = cacheGet(k);
-  if (cached) return cached;
-  try {
-    const r = await fetch(`${PROXY}/${chain}/collection?id=${encodeURIComponent(id)}`);
-    if (!r.ok) return { id, name: item.name, pfp: null, chain };
-    const data = await r.json();
-    const col = data.collection || {};
-    const out = {
-      id: col.id || id,
-      name: col.name || item.name,
-      pfp: col.pfp || null,
-      chain,
-    };
-    cacheSet(k, out);
-    return out;
-  } catch {
-    return { id, name: item.name, pfp: null, chain };
-  }
-}
-
-// Helper: tiny sleep
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
+// Top collections come from the BAKED JSON — zero API calls on page load.
+// To refresh: run `npm run bake` locally, commit, push.
 async function fetchTopCollections(chain, _limit = 25) {
-  const list = CURATED[chain] || [];
-
-  // Solana hits Magic Eden which rate-limits aggressively (429 after ~10 reqs/min).
-  // Fetch sequentially with throttle for Solana, parallel for everyone else.
-  if (chain === "solana") {
-    const out = [];
-    for (const it of list) {
-      const col = await fetchOneCollection(chain, it);
-      if (col) out.push(col);
-      await sleep(200); // ~5 reqs/sec, well under ME's limit
-    }
-    return out;
-  }
-
-  const results = await Promise.all(list.map(it => fetchOneCollection(chain, it)));
-  return results.filter(Boolean);
+  return (baked[chain] || []).filter(c => c.id && c.name);
 }
 
 async function fetchTokens(chain, collectionId, limit = 30) {
@@ -132,6 +89,9 @@ function marketplaceLabel(chain) {
 }
 
 function marqueeNamesFor(chain) {
+  // Prefer baked names (real, fetched) over hand-typed curated ones.
+  const fromBake = (baked[chain] || []).map(c => c.name);
+  if (fromBake.length) return fromBake;
   return (CURATED[chain] || []).map(c => c.name);
 }
 function allMarqueeNames() {

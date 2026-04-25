@@ -1,0 +1,321 @@
+{
+  "ethereum": [
+    {
+      "id": "0x7caB6c0E4DC14b995901F5D672Cdcc8469CC459D",
+      "name": "Saints of LA | ETERNAL",
+      "pfp": "https://i2c.seadn.io/collection/saints-of-la-eternal/image_type_logo/cc6b02bca622363df9eea8e7328215/77cc6b02bca622363df9eea8e7328215.jpeg",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x70789e18A75611A9516d6251D650D096740a9e07",
+      "name": "SteezyApeGang",
+      "pfp": "https://i2c.seadn.io/ethereum/115898c934864ca4bd9f4cbec5661f41/369bf526c110f8815de4ff18564dc5/a5369bf526c110f8815de4ff18564dc5.jpeg",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x32fC5Bcabc1F78308be11754493c49116c0fa35f",
+      "name": "HMN5",
+      "pfp": "https://i2c.seadn.io/ethereum/e5267c8e24ac416e9d24c38cfc71ab64/e0f1f9baecedcec8674e307d5fa1c1/59e0f1f9baecedcec8674e307d5fa1c1.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xB8Ea78fcaCEf50d41375E44E6814ebbA36Bb33c4",
+      "name": "Good Vibes Club",
+      "pfp": "https://i2c.seadn.io/ethereum/9256748b29fa412e9594ad001e673a26/a2b8fe4048f4e6ea170550ca27a2f7/8ba2b8fe4048f4e6ea170550ca27a2f7.jpeg",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x270eDBE355ba17f787503c372464ECbaf3ada61a",
+      "name": "z00tz Anchor Club",
+      "pfp": "https://i2c.seadn.io/ethereum/d53442f448064e208197f5e99fc43c7d/40b80b794506becd6a02a27e5fd09c/bc40b80b794506becd6a02a27e5fd09c.gif",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
+      "name": "CryptoPunks",
+      "pfp": "https://i2c.seadn.io/ethereum/41f13fa2cbb64d908a9add3243345bbc/f092b6ebf5bbfaca498a6135cad5a8/4bf092b6ebf5bbfaca498a6135cad5a8.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+      "name": "Bored Ape Yacht Club",
+      "pfp": "https://i2c.seadn.io/collection/boredapeyachtclub/image/1a09c26b1c30427b26944c47fc7bb9/d81a09c26b1c30427b26944c47fc7bb9.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x60E4d786628Fea6478F785A6d7e704777c86a7c6",
+      "name": "Mutant Ape Yacht Club",
+      "pfp": "https://i2c.seadn.io/collection/mutant-ape-yacht-club/image/33dcf5ce12bc4760bf912a5b3f5979/f033dcf5ce12bc4760bf912a5b3f5979.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xBd3531dA5CF5857e7CfAA92426877b022e612cf8",
+      "name": "Pudgy Penguins",
+      "pfp": "https://i2c.seadn.io/collection/pudgypenguins/image/f489fb69fd11886b468c0f7ff1376c/cdf489fb69fd11886b468c0f7ff1376c.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x524cAB2ec69124574082676e6F654a18df49A048",
+      "name": "Lil Pudgys",
+      "pfp": "https://i2c.seadn.io/collection/lilpudgys/image/9289b91d3d0cefccfe6b9c7f83f471/649289b91d3d0cefccfe6b9c7f83f471.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xED5AF388653567Af2F388E6224dC7C4b3241C544",
+      "name": "Azuki",
+      "pfp": "https://i2c.seadn.io/collection/azuki/image/d62d4b9df96c961712b03f41c4231c/4dd62d4b9df96c961712b03f41c4231c.jpeg",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xB6a37b5d14D502c3Ab0Ae6f3a0E058BC9517786e",
+      "name": "Azuki Elementals",
+      "pfp": "https://i2c.seadn.io/collection/azukielementals/image/af43ee4a02d5affb7e8fc186d0bdb5/bbaf43ee4a02d5affb7e8fc186d0bdb5.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x8a90CAb2b38dba80c64b7734e58Ee1dB38B8992e",
+      "name": "Doodles",
+      "pfp": "https://i2c.seadn.io/collection/doodles-official/image/63a85a2900fdd4bfe8f34a444b72d3/e663a85a2900fdd4bfe8f34a444b72d3.jpeg",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x5Af0D9827E0c53E4799BB226655A1de152A425a5",
+      "name": "Milady Maker",
+      "pfp": "https://i2c.seadn.io/collection/milady/image/d4499e2e55f5e85ead4b0eb7f7dad7/90d4499e2e55f5e85ead4b0eb7f7dad7.jpeg",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xD3D9ddd0CF0A5F0BFB8f7fcEAe075DF687eAEBaB",
+      "name": "Redacted Remilio Babies",
+      "pfp": "https://i2c.seadn.io/collection/remilio-babies/image/6168e731afd02d5e878eb03876cfd4/9d6168e731afd02d5e878eb03876cfd4.gif",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x23581767a106ae21c074b2276D25e5C3e136a68b",
+      "name": "Moonbirds",
+      "pfp": "https://i2c.seadn.io/admin-uploads/8a589d8d6f4e5ffd1200a47be25783/678a589d8d6f4e5ffd1200a47be25783.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x49cF6f5d44E70224e2E23fDcdd2C053F30aDA28B",
+      "name": "CLONE X - X TAKASHI MURAKAMI",
+      "pfp": "https://i2c.seadn.io/ethereum/75db99053ab444cfa0d8fb55d1f60547/2a98bfb35de339b49f3a4f0c4696c4/5c2a98bfb35de339b49f3a4f0c4696c4.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xe785E82358879F061BC3dcAC6f0444462D4b5330",
+      "name": "World of Women",
+      "pfp": "https://i2c.seadn.io/admin-uploads/20e55f17e6d30cc82f8fcd35347339/e320e55f17e6d30cc82f8fcd35347339.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xa3AEe8BcE55BEeA1951EF834b99f3Ac60d1ABeeB",
+      "name": "VeeFriends",
+      "pfp": "https://i2c.seadn.io/collection/veefriends/image_type_logo/14dac63ac55553de06c5690fca2583/c214dac63ac55553de06c5690fca2583.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xba30E5F9Bb24caa003E9f2f0497Ad287FDF95623",
+      "name": "Bored Ape Kennel Club",
+      "pfp": "https://i2c.seadn.io/admin-uploads/c4d5c95d036dca096cf5a3aa62cbb6/7bc4d5c95d036dca096cf5a3aa62cbb6.jpeg",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x306b1ea3ecdf94aB739F1910bbda052Ed4A9f949",
+      "name": "BEANZ Official",
+      "pfp": "https://i2c.seadn.io/collection/beanzofficial/image/55051cfd6611e32edc843d7cc5acf7/5c55051cfd6611e32edc843d7cc5acf7.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x394E3d3044fC89fCDd966D3cb35Ac0B32B0Cda91",
+      "name": "RENGA",
+      "pfp": "https://i2c.seadn.io/ethereum/05357f37a6184a97b07f7cefc099d993/b11e36be14a5d31c75b19d03996fed/f3b11e36be14a5d31c75b19d03996fed.gif",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0xd774557b647330C91Bf44cfEAB205095f7E6c367",
+      "name": "Nakamigos",
+      "pfp": "https://i2c.seadn.io/ethereum/79d749801e0d4a2fa3ddd4ca31a8cd05/19b033c453fe36c5d9e2ac451379a7/1619b033c453fe36c5d9e2ac451379a7.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x769272677faB02575E84945F03Eca517ACc544Cc",
+      "name": "Memeland Captainz",
+      "pfp": "https://i2c.seadn.io/collection/memelandcaptainz/image/f4d75778066bce740050615bc84e21/6df4d75778066bce740050615bc84e21.png",
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x1A92f7381B9F03921564a437210bB9396471050C",
+      "name": "Cool Cats",
+      "pfp": "https://i2c.seadn.io/ethereum/aaa51fcc7e44421b8a9f54bab4269fd1/2c31f59ad9d5f4565d33e0351fa8e9/872c31f59ad9d5f4565d33e0351fa8e9.png",
+      "chain": "ethereum"
+    }
+  ],
+  "apechain": [
+    {
+      "id": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+      "name": "Bored Ape Yacht Club",
+      "pfp": null,
+      "chain": "apechain"
+    },
+    {
+      "id": "0x60e4d786628fea6478f785a6d7e704777c86a7c6",
+      "name": "Mutant Ape Yacht Club",
+      "pfp": null,
+      "chain": "apechain"
+    }
+  ],
+  "solana": [
+    {
+      "id": "mad_lads",
+      "name": "Mad Lads",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "degods",
+      "name": "DeGods",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "y00ts",
+      "name": "y00ts",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "solana_monkey_business",
+      "name": "SMB Gen2",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "okay_bears",
+      "name": "Okay Bears",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "tensorians",
+      "name": "Tensorians",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "claynosaurz",
+      "name": "Claynosaurz",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "famous_fox_federation",
+      "name": "Famous Fox Federation",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "aurory",
+      "name": "Aurory",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "degenerate_ape_academy",
+      "name": "Degenerate Ape Academy",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "abc",
+      "name": "ABC",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "frogana",
+      "name": "Frogana",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "retardio_cousins",
+      "name": "Retardio Cousins",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "the_heist",
+      "name": "The Heist",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "quekz",
+      "name": "Quekz",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "solana_money_boys",
+      "name": "Solana Money Boys",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "cets_on_creck",
+      "name": "Cets on Creck",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "critters_confederacy",
+      "name": "Critters Confederacy",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "mindfolk_wood",
+      "name": "Mindfolk",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "boryoku_dragonz",
+      "name": "Boryoku Dragonz",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "galactic_gecko_space_garage",
+      "name": "GalacticGeckoSG",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "photo_finish_pfp",
+      "name": "Photofinish PHL",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "trippin_ape_tribe",
+      "name": "Trippin Ape Tribe",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "pesky_penguins",
+      "name": "Pesky Penguins",
+      "pfp": null,
+      "chain": "solana"
+    },
+    {
+      "id": "bears_reloaded",
+      "name": "Bears Reloaded",
+      "pfp": null,
+      "chain": "solana"
+    }
+  ],
+  "builtAt": "2026-04-25T20:35:16.080Z"
+}
