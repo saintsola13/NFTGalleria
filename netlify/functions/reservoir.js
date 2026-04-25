@@ -6,8 +6,8 @@
 // Required env var: ALCHEMY_API_KEY  (only for ETH + Ape)
 //
 // Client request shapes (frontend talks to /api/reservoir/...):
-//   GET /api/reservoir/<chain>/top?limit=25
-//   GET /api/reservoir/<chain>/tokens?collection=<id>&limit=30
+//   GET /api/reservoir/<chain>/collection?id=<contract|symbol>
+//   GET /api/reservoir/<chain>/tokens?collection=<contract|symbol>&limit=30
 //
 // Returns a normalized shape regardless of upstream.
 
@@ -29,10 +29,11 @@ export default async (req) => {
       return json({ error: "missing chain or action" }, 400);
     }
 
-    if (action === "top") {
-      const limit = clampInt(url.searchParams.get("limit"), 25, 1, 50);
-      if (chain === "solana") return await topSolana(limit);
-      if (chain === "ethereum" || chain === "apechain") return await topAlchemy(chain, limit);
+    if (action === "collection") {
+      const id = url.searchParams.get("id");
+      if (!id) return json({ error: "missing id" }, 400);
+      if (chain === "solana") return await solanaCollection(id);
+      if (chain === "ethereum" || chain === "apechain") return await alchemyCollection(chain, id);
       return json({ error: "unknown chain", chain }, 400);
     }
 
@@ -52,40 +53,25 @@ export default async (req) => {
 };
 
 // ─── SOLANA via Magic Eden v2 ──────────────────────────────
-async function topSolana(limit) {
-  // Pull popular collections, sorted by 24h volume.
+async function solanaCollection(symbol) {
   const r = await fetch(
-    `https://api-mainnet.magiceden.dev/v2/marketplace/popular_collections?limit=20&timeRange=1d`,
+    `https://api-mainnet.magiceden.dev/v2/collections/${encodeURIComponent(symbol)}`,
     { headers: { accept: "application/json" } },
   );
-  if (!r.ok) {
-    // Fallback to plain list
-    const r2 = await fetch(
-      `https://api-mainnet.magiceden.dev/v2/collections?offset=0&limit=20`,
-      { headers: { accept: "application/json" } },
-    );
-    if (!r2.ok) return json({ collections: [] });
-    const arr = await r2.json();
-    const out = (arr || []).slice(0, limit).map(normSolanaCol);
-    return cached(json({ collections: out }));
-  }
-  const arr = await r.json();
-  const out = (arr || []).slice(0, limit).map(normSolanaCol);
-  return cached(json({ collections: out }));
-}
-
-function normSolanaCol(c) {
-  return {
+  if (!r.ok) return json({ collection: null, status: r.status });
+  const c = await r.json();
+  return cached(json({ collection: {
     id: c.symbol,
     name: c.name,
     pfp: c.image,
     chain: "solana",
-  };
+  }}));
 }
 
 async function tokensSolana(symbol, limit) {
-  // ME requires offset+limit multiples of 20. Round up.
   const askLimit = Math.max(20, Math.ceil(limit / 20) * 20);
+  // listings only — fast and reliable. If a collection is sparse we'll just
+  // show what's there.
   const r = await fetch(
     `https://api-mainnet.magiceden.dev/v2/collections/${encodeURIComponent(symbol)}/listings?offset=0&limit=${askLimit}`,
     { headers: { accept: "application/json" } },
@@ -102,29 +88,26 @@ async function tokensSolana(symbol, limit) {
 }
 
 // ─── ETH + APECHAIN via Alchemy NFT API ────────────────────
-async function topAlchemy(chain, limit) {
+async function alchemyCollection(chain, contract) {
   const key = process.env.ALCHEMY_API_KEY;
-  if (!key) return json({ error: "ALCHEMY_API_KEY not configured", collections: [] }, 500);
+  if (!key) return json({ error: "ALCHEMY_API_KEY not configured", collection: null }, 500);
   const host = ALCHEMY_HOSTS[chain];
-  // computeRarity / getTopNFTCollections — Alchemy has a "getTopNFTCollections" endpoint.
-  // Endpoint: GET /nft/v3/{key}/getTopNFTCollections?period=24h
   const r = await fetch(
-    `https://${host}/nft/v3/${key}/getTopNFTCollections?period=24h`,
+    `https://${host}/nft/v3/${key}/getContractMetadata?contractAddress=${encodeURIComponent(contract)}`,
     { headers: { accept: "application/json" } },
   );
   if (!r.ok) {
     const body = await r.text();
-    return json({ error: "alchemy top failed", status: r.status, body: body.slice(0, 200), collections: [] }, 502);
+    return json({ error: "alchemy meta failed", status: r.status, body: body.slice(0, 200), collection: null }, 502);
   }
   const data = await r.json();
-  const list = (data.collections || []).slice(0, limit);
-  const out = list.map(c => ({
-    id: c.address || c.contractAddress,
-    name: c.name || c.collectionName || "Untitled",
-    pfp: c.image?.cachedUrl || c.image?.originalUrl || c.imageUrl || c.collectionImage || null,
+  const c = data.contract || {};
+  return cached(json({ collection: {
+    id: c.address || contract,
+    name: c.name || c.openSeaMetadata?.collectionName || "Untitled",
+    pfp: c.openSeaMetadata?.imageUrl || data.image?.cachedUrl || data.image?.originalUrl || null,
     chain,
-  })).filter(c => c.id && c.name);
-  return cached(json({ collections: out }));
+  }}));
 }
 
 async function tokensAlchemy(chain, contract, limit) {
@@ -165,6 +148,6 @@ function json(obj, status = 200) {
 
 function cached(resp) {
   const r = new Response(resp.body, resp);
-  r.headers.set("cache-control", "public, max-age=120, s-maxage=120");
+  r.headers.set("cache-control", "public, max-age=300, s-maxage=300");
   return r;
 }

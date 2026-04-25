@@ -327,3 +327,45 @@
   @media (min-width: 768px) { .footer-inner { flex-direction: row; } }
   .footer-title { font-family: 'Archivo Black', sans-serif; font-size: 1.5rem; }
   .footer-meta { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ─── Top Marquee ─────────────────────────────────────────── */
+.marquee {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #0d0d0d;
+  color: #fff;
+  border-bottom: 3px solid #ff2d6f;
+  overflow: hidden;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marqueeScroll 60s linear infinite;
+  will-change: transform;
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.marquee-sep {
+  display: inline-block;
+  margin: 0 0.65rem 0 0.85rem;
+  color: #ff2d6f;
+  transform: translateY(-1px);
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}

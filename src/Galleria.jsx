@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { ETHEREUM, APECHAIN, SOLANA } from "./curated.js";
 
 // ─────────────────────────────────────────────────────────────
 //  NFT GALLERIA  —  Top 25 × 3 Chains
@@ -21,6 +22,13 @@ const PROXY = "/api/reservoir";
 // localStorage TTL for collection lists / token grids
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
+// Curated lists per chain. The gallery curates — it does not aggregate.
+const CURATED = {
+  ethereum: ETHEREUM,
+  apechain: APECHAIN,
+  solana: SOLANA,
+};
+
 // ─── tiny localStorage cache ────────────────────────────────
 function cacheGet(key) {
   try {
@@ -36,17 +44,38 @@ function cacheSet(key, v) {
 }
 
 // ─── Reservoir fetchers (proxied) ───────────────────────────
-async function fetchTopCollections(chain, limit = 25) {
-  const k = `top:${chain}:${limit}`;
-  const c = cacheGet(k); if (c) return c;
+async function fetchOneCollection(chain, item) {
+  // For ETH/Ape we have `contract`; for Solana we have `symbol`.
+  const id = item.contract || item.symbol;
+  if (!id || id === "0x0000000000000000000000000000000000000000") {
+    // Skip placeholder entries until they're filled in.
+    return null;
+  }
+  const k = `col:${chain}:${id}`;
+  const cached = cacheGet(k);
+  if (cached) return cached;
   try {
-    const r = await fetch(`${PROXY}/${chain}/top?limit=${limit}`);
-    if (!r.ok) return [];
+    const r = await fetch(`${PROXY}/${chain}/collection?id=${encodeURIComponent(id)}`);
+    if (!r.ok) return { id, name: item.name, pfp: null, chain };
     const data = await r.json();
-    const out = (data.collections || []).filter(c => c.id && c.name);
+    const col = data.collection || {};
+    const out = {
+      id: col.id || id,
+      name: col.name || item.name,
+      pfp: col.pfp || null,
+      chain,
+    };
     cacheSet(k, out);
     return out;
-  } catch { return []; }
+  } catch {
+    return { id, name: item.name, pfp: null, chain };
+  }
+}
+
+async function fetchTopCollections(chain, _limit = 25) {
+  const list = CURATED[chain] || [];
+  const results = await Promise.all(list.map(it => fetchOneCollection(chain, it)));
+  return results.filter(Boolean);
 }
 
 async function fetchTokens(chain, collectionId, limit = 30) {
@@ -62,6 +91,17 @@ async function fetchTokens(chain, collectionId, limit = 30) {
     cacheSet(k, out);
     return out;
   } catch { return []; }
+}
+
+function marqueeNamesFor(chain) {
+  return (CURATED[chain] || []).map(c => c.name);
+}
+function allMarqueeNames() {
+  return [
+    ...marqueeNamesFor("ethereum"),
+    ...marqueeNamesFor("solana"),
+    ...marqueeNamesFor("apechain"),
+  ];
 }
 
 // ─── Chain symbol SVGs ──────────────────────────────────────
@@ -133,6 +173,27 @@ function ImgWithFallback({ src, alt, className, style }) {
   );
 }
 
+// ─── Marquee scrolling banner ──────────────────────────────
+function Marquee({ items }) {
+  // Duplicate items twice so the loop is seamless.
+  const list = useMemo(() => {
+    const arr = items && items.length ? items : ["NFT GALLERIA"];
+    return [...arr, ...arr];
+  }, [items]);
+  return (
+    <div className="marquee" aria-hidden="true">
+      <div className="marquee-track">
+        {list.map((name, i) => (
+          <span key={i} className="marquee-item f-mono">
+            {name}
+            <span className="marquee-sep">★</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────────
 function Galleria() {
   const [view, setView] = useState({ screen: "home" });
@@ -142,6 +203,8 @@ function Galleria() {
   return (
     <div>
       <div className="paper" />
+
+      <Marquee items={allMarqueeNames()} />
 
       <nav className="nav">
         <div className="wrap nav-inner">
