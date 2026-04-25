@@ -169,61 +169,61 @@
     {
       "id": "mad_lads",
       "name": "Mad Lads",
-      "pfp": null,
+      "pfp": "https://madlads.s3.us-west-2.amazonaws.com/images/8420.png",
       "chain": "solana"
     },
     {
       "id": "degods",
       "name": "DeGods",
-      "pfp": null,
+      "pfp": "https://metadata.degods.com/g/4924-dead.png",
       "chain": "solana"
     },
     {
       "id": "y00ts",
       "name": "y00ts",
-      "pfp": null,
+      "pfp": "https://metadata.y00ts.com/y/4242.png",
       "chain": "solana"
     },
     {
       "id": "solana_monkey_business",
       "name": "SMB Gen2",
-      "pfp": null,
+      "pfp": "https://arweave.net/qhEsQYPi3iPWjWtyoxZvxmVMLnuC7H4iU0fUS0dYpWE",
       "chain": "solana"
     },
     {
       "id": "okay_bears",
       "name": "Okay Bears",
-      "pfp": null,
+      "pfp": "https://arweave.net/dDbt5xjUijpWsuGslnQ3Q3T3owfHGM6CaSWHVTdcbIQ?ext=png",
       "chain": "solana"
     },
     {
       "id": "tensorians",
       "name": "Tensorians",
-      "pfp": null,
+      "pfp": "https://shdw-drive.genesysgo.net/9z3Bt6L3Z1JtBy2gmFbZdvEEZ3cD8hUs8CqbSpncFEcS/0.png",
       "chain": "solana"
     },
     {
       "id": "claynosaurz",
       "name": "Claynosaurz",
-      "pfp": null,
+      "pfp": "https://updg8.com/imgdata/Bb7P52pWZj2Cap3T8D7Qhz4Ti2bUcyaW8NQBgJzPzQ8",
       "chain": "solana"
     },
     {
       "id": "famous_fox_federation",
       "name": "Famous Fox Federation",
-      "pfp": null,
+      "pfp": "https://famousfoxes.com/cdn/2.png",
       "chain": "solana"
     },
     {
       "id": "aurory",
       "name": "Aurory",
-      "pfp": null,
+      "pfp": "https://nft-img.aurory.io/staging/aurorian/000.png",
       "chain": "solana"
     },
     {
       "id": "degenerate_ape_academy",
       "name": "Degenerate Ape Academy",
-      "pfp": null,
+      "pfp": "https://arweave.net/m1JR_6PzLUH95Pd6zvxbg6uGEdGTM1ENW4vCjXrhuaA",
       "chain": "solana"
     },
     {
