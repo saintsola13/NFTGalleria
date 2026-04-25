@@ -40,19 +40,10 @@ async function fetchTopCollections(chain, limit = 25) {
   const k = `top:${chain}:${limit}`;
   const c = cacheGet(k); if (c) return c;
   try {
-    const r = await fetch(
-      `${PROXY}/${chain}/collections/v7?sortBy=1DayVolume&limit=${limit}&includeTopBid=false`
-    );
+    const r = await fetch(`${PROXY}/${chain}/top?limit=${limit}`);
     if (!r.ok) return [];
     const data = await r.json();
-    const out = (data.collections || [])
-      .map(c => ({
-        id: c.id,
-        chain,
-        name: c.name,
-        pfp: c.image,
-      }))
-      .filter(c => c.id && c.name);
+    const out = (data.collections || []).filter(c => c.id && c.name);
     cacheSet(k, out);
     return out;
   } catch { return []; }
@@ -63,18 +54,11 @@ async function fetchTokens(chain, collectionId, limit = 30) {
   const c = cacheGet(k); if (c) return c;
   try {
     const r = await fetch(
-      `${PROXY}/${chain}/tokens/v7?collection=${encodeURIComponent(collectionId)}&limit=${limit}&sortBy=tokenId`
+      `${PROXY}/${chain}/tokens?collection=${encodeURIComponent(collectionId)}&limit=${limit}`
     );
     if (!r.ok) return [];
     const data = await r.json();
-    const out = (data.tokens || [])
-      .map(t => ({
-        id: t.token?.tokenId || t.token?.tokenAddress,
-        tokenId: t.token?.tokenId,
-        name: t.token?.name || null,
-        img: t.token?.image || t.token?.imageSmall,
-      }))
-      .filter(t => t.img);
+    const out = (data.tokens || []).filter(t => t.img);
     cacheSet(k, out);
     return out;
   } catch { return []; }
@@ -103,9 +87,30 @@ const ChainSymbol = ({ chain }) => {
       </svg>
     );
   }
+  // ApeChain — chunky ape mark
   return (
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path fill="currentColor" d="M50 10 C 30 10, 20 25, 20 40 C 15 42, 10 48, 10 55 C 10 62, 15 68, 22 70 C 20 80, 28 90, 38 90 L 62 90 C 72 90, 80 80, 78 70 C 85 68, 90 62, 90 55 C 90 48, 85 42, 80 40 C 80 25, 70 10, 50 10 Z M 35 45 C 38 42, 42 42, 45 45 C 45 50, 42 52, 38 52 C 35 50, 33 48, 35 45 Z M 55 45 C 58 42, 62 42, 65 45 C 67 48, 65 50, 62 52 C 58 52, 55 50, 55 45 Z M 40 65 L 60 65 C 58 72, 52 75, 50 75 C 48 75, 42 72, 40 65 Z"/>
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      {/* head */}
+      <ellipse cx="100" cy="110" rx="68" ry="62" fill="currentColor"/>
+      {/* ears */}
+      <circle cx="32" cy="86" r="22" fill="currentColor"/>
+      <circle cx="168" cy="86" r="22" fill="currentColor"/>
+      <circle cx="32" cy="86" r="10" fill="#0d0d0d" opacity="0.35"/>
+      <circle cx="168" cy="86" r="10" fill="#0d0d0d" opacity="0.35"/>
+      {/* face mask (lighter) */}
+      <ellipse cx="100" cy="128" rx="46" ry="42" fill="#0d0d0d" opacity="0.15"/>
+      {/* brow */}
+      <path d="M48 92 Q 76 76 100 86 Q 124 76 152 92" stroke="#0d0d0d" strokeWidth="6" fill="none" strokeLinecap="round"/>
+      {/* eyes */}
+      <circle cx="76" cy="110" r="8" fill="#0d0d0d"/>
+      <circle cx="124" cy="110" r="8" fill="#0d0d0d"/>
+      <circle cx="78" cy="108" r="2" fill="#fff"/>
+      <circle cx="126" cy="108" r="2" fill="#fff"/>
+      {/* nostrils */}
+      <ellipse cx="90" cy="138" rx="4" ry="6" fill="#0d0d0d"/>
+      <ellipse cx="110" cy="138" rx="4" ry="6" fill="#0d0d0d"/>
+      {/* mouth */}
+      <path d="M76 158 Q 100 168 124 158" stroke="#0d0d0d" strokeWidth="5" fill="none" strokeLinecap="round"/>
     </svg>
   );
 };
