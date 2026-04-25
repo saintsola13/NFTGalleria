@@ -127,31 +127,9 @@ const ChainSymbol = ({ chain }) => {
       </svg>
     );
   }
-  // ApeChain — chunky ape mark
+  // ApeChain — use the official ape mark image
   return (
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      {/* head */}
-      <ellipse cx="100" cy="110" rx="68" ry="62" fill="currentColor"/>
-      {/* ears */}
-      <circle cx="32" cy="86" r="22" fill="currentColor"/>
-      <circle cx="168" cy="86" r="22" fill="currentColor"/>
-      <circle cx="32" cy="86" r="10" fill="#0d0d0d" opacity="0.35"/>
-      <circle cx="168" cy="86" r="10" fill="#0d0d0d" opacity="0.35"/>
-      {/* face mask (lighter) */}
-      <ellipse cx="100" cy="128" rx="46" ry="42" fill="#0d0d0d" opacity="0.15"/>
-      {/* brow */}
-      <path d="M48 92 Q 76 76 100 86 Q 124 76 152 92" stroke="#0d0d0d" strokeWidth="6" fill="none" strokeLinecap="round"/>
-      {/* eyes */}
-      <circle cx="76" cy="110" r="8" fill="#0d0d0d"/>
-      <circle cx="124" cy="110" r="8" fill="#0d0d0d"/>
-      <circle cx="78" cy="108" r="2" fill="#fff"/>
-      <circle cx="126" cy="108" r="2" fill="#fff"/>
-      {/* nostrils */}
-      <ellipse cx="90" cy="138" rx="4" ry="6" fill="#0d0d0d"/>
-      <ellipse cx="110" cy="138" rx="4" ry="6" fill="#0d0d0d"/>
-      {/* mouth */}
-      <path d="M76 158 Q 100 168 124 158" stroke="#0d0d0d" strokeWidth="5" fill="none" strokeLinecap="round"/>
-    </svg>
+    <img src="/apechain-ape.jpg" alt="ApeChain" className="chain-card-fullbleed" />
   );
 };
 
@@ -333,10 +311,14 @@ function ChainCard({ chain, index, mounted, onClick }) {
     >
       <div className="tape" style={{ top: "-11px", left: "20px", transform: "rotate(-4deg)" }} />
       <div className="chain-card-tag">{chain.tag}</div>
-      <div className="chain-card-img" style={{ background: chain.color }}>
-        <div className="chain-glyph-svg" style={{ color: chain.hot }}>
+      <div className="chain-card-img" style={{ background: chain.id === "apechain" ? "#1a4dff" : chain.color }}>
+        {chain.id === "apechain" ? (
           <ChainSymbol chain={chain.id} />
-        </div>
+        ) : (
+          <div className="chain-glyph-svg" style={{ color: chain.hot }}>
+            <ChainSymbol chain={chain.id} />
+          </div>
+        )}
       </div>
       <div className="chain-card-nameplate">
         <div className="chain-card-namerow">
