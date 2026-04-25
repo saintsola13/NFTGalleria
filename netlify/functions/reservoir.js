@@ -92,20 +92,45 @@ async function alchemyCollection(chain, contract) {
   const key = process.env.ALCHEMY_API_KEY;
   if (!key) return json({ error: "ALCHEMY_API_KEY not configured", collection: null }, 500);
   const host = ALCHEMY_HOSTS[chain];
+
+  // Alchemy v3 shape (top-level) for getContractMetadata:
+  //   { address, name, symbol, totalSupply, tokenType, contractDeployer,
+  //     openSeaMetadata: { collectionName, imageUrl, ... },
+  //     ... }
   const r = await fetch(
     `https://${host}/nft/v3/${key}/getContractMetadata?contractAddress=${encodeURIComponent(contract)}`,
     { headers: { accept: "application/json" } },
   );
   if (!r.ok) {
     const body = await r.text();
-    return json({ error: "alchemy meta failed", status: r.status, body: body.slice(0, 200), collection: null }, 502);
+    return json({ error: "alchemy meta failed", status: r.status, body: body.slice(0, 300), collection: null }, 502);
   }
-  const data = await r.json();
-  const c = data.contract || {};
+  const c = await r.json();
+  const os = c.openSeaMetadata || c.openSea || {};
+  const name = os.collectionName || c.name || "Untitled";
+  const pfp = os.imageUrl || c.image?.cachedUrl || c.image?.originalUrl || null;
+
+  // If we couldn't get an image from contract metadata, fall back to fetching
+  // the first NFT in the collection and using its image.
+  let finalPfp = pfp;
+  if (!finalPfp) {
+    try {
+      const r2 = await fetch(
+        `https://${host}/nft/v3/${key}/getNFTsForContract?contractAddress=${encodeURIComponent(contract)}&withMetadata=true&limit=1`,
+        { headers: { accept: "application/json" } },
+      );
+      if (r2.ok) {
+        const d2 = await r2.json();
+        const n0 = d2.nfts?.[0];
+        finalPfp = n0?.image?.cachedUrl || n0?.image?.originalUrl || n0?.image?.thumbnailUrl || null;
+      }
+    } catch {}
+  }
+
   return cached(json({ collection: {
     id: c.address || contract,
-    name: c.name || c.openSeaMetadata?.collectionName || "Untitled",
-    pfp: c.openSeaMetadata?.imageUrl || data.image?.cachedUrl || data.image?.originalUrl || null,
+    name,
+    pfp: finalPfp,
     chain,
   }}));
 }
