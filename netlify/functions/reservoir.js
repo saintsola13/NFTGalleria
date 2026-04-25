@@ -173,6 +173,8 @@ function json(obj, status = 200) {
 
 function cached(resp) {
   const r = new Response(resp.body, resp);
-  r.headers.set("cache-control", "public, max-age=300, s-maxage=300");
+  // 1h on browser, 6h on Netlify edge — collection metadata barely changes
+  // and Magic Eden rate-limits hard, so cache aggressively.
+  r.headers.set("cache-control", "public, max-age=3600, s-maxage=21600");
   return r;
 }

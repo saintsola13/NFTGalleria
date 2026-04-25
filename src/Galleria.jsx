@@ -19,8 +19,9 @@ const CHAINS = [
 // in prod Netlify rewrites /api/reservoir/* -> /.netlify/functions/reservoir/*
 const PROXY = "/api/reservoir";
 
-// localStorage TTL for collection lists / token grids
-const CACHE_TTL_MS = 5 * 60 * 1000;
+// localStorage TTL for collection lists / token grids.
+// Long because Magic Eden rate-limits hard and collection PFPs don't change.
+const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
 
 // Curated lists per chain. The gallery curates — it does not aggregate.
 const CURATED = {
@@ -72,8 +73,24 @@ async function fetchOneCollection(chain, item) {
   }
 }
 
+// Helper: tiny sleep
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
 async function fetchTopCollections(chain, _limit = 25) {
   const list = CURATED[chain] || [];
+
+  // Solana hits Magic Eden which rate-limits aggressively (429 after ~10 reqs/min).
+  // Fetch sequentially with throttle for Solana, parallel for everyone else.
+  if (chain === "solana") {
+    const out = [];
+    for (const it of list) {
+      const col = await fetchOneCollection(chain, it);
+      if (col) out.push(col);
+      await sleep(200); // ~5 reqs/sec, well under ME's limit
+    }
+    return out;
+  }
+
   const results = await Promise.all(list.map(it => fetchOneCollection(chain, it)));
   return results.filter(Boolean);
 }
