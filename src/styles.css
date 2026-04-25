@@ -377,3 +377,30 @@
   object-fit: cover;
   display: block;
 }
+
+/* ─── Lightbox marketplace link ─────────────────────────── */
+.lightbox-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.lightbox-link {
+  display: inline-block;
+  padding: 0.55rem 0.9rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #0d0d0d;
+  background: #b8ff00;
+  border: 2px solid #0d0d0d;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 #0d0d0d;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.lightbox-link:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #0d0d0d;
+}

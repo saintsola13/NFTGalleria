@@ -93,6 +93,27 @@ async function fetchTokens(chain, collectionId, limit = 30) {
   } catch { return []; }
 }
 
+function marketplaceUrl(chain, contract, tokenId) {
+  if (!contract) return null;
+  if (chain === "ethereum") {
+    return `https://opensea.io/assets/ethereum/${contract}/${tokenId}`;
+  }
+  if (chain === "apechain") {
+    return `https://magiceden.io/collections/apechain/${contract}/${tokenId}`;
+  }
+  if (chain === "solana") {
+    // For Solana, contract here is actually the token mint address.
+    return `https://magiceden.io/item-details/${contract}`;
+  }
+  return null;
+}
+
+function marketplaceLabel(chain) {
+  if (chain === "solana") return "VIEW ON MAGIC EDEN";
+  if (chain === "apechain") return "VIEW ON MAGIC EDEN";
+  return "VIEW ON OPENSEA";
+}
+
 function marqueeNamesFor(chain) {
   return (CURATED[chain] || []).map(c => c.name);
 }
@@ -521,28 +542,47 @@ function CollectionScreen({ collection, chainId, onBack }) {
         </div>
       </section>
 
-      {focused && (
-        <div className="lightbox pop" onClick={() => setFocused(null)}>
-          <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
-            <div className="lightbox-card">
-              <div className="lightbox-img">
-                <ImgWithFallback src={focused.img} alt={focused.name || focused.tokenId} />
-              </div>
-              <div className="lightbox-meta">
-                <div style={{ minWidth: 0, flex: 1 }}>
-                  <div className="lightbox-title">{collection.name}</div>
-                  <div className="lightbox-sub f-mono">
-                    #{focused.tokenId || "—"} · {chain.name}
+      {focused && (() => {
+        // For Solana the marketplace url uses the token mint id (we stash it in piece.id).
+        // For ETH/Ape it uses the contract + tokenId.
+        const url = chainId === "solana"
+          ? marketplaceUrl("solana", focused.id, focused.tokenId)
+          : marketplaceUrl(chainId, collection.id, focused.tokenId);
+        return (
+          <div className="lightbox pop" onClick={() => setFocused(null)}>
+            <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
+              <div className="lightbox-card">
+                <div className="lightbox-img">
+                  <ImgWithFallback src={focused.img} alt={focused.name || focused.tokenId} />
+                </div>
+                <div className="lightbox-meta">
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div className="lightbox-title">{collection.name}</div>
+                    <div className="lightbox-sub f-mono">
+                      #{focused.tokenId || "—"} · {chain.name}
+                    </div>
+                  </div>
+                  <div className="lightbox-actions">
+                    {url && (
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="lightbox-link sticker"
+                      >
+                        {marketplaceLabel(chainId)} →
+                      </a>
+                    )}
+                    <button onClick={() => setFocused(null)} className="lightbox-close sticker">
+                      ✕ CLOSE
+                    </button>
                   </div>
                 </div>
-                <button onClick={() => setFocused(null)} className="lightbox-close sticker">
-                  ✕ CLOSE
-                </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </main>
   );
 }
