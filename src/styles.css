@@ -404,3 +404,35 @@
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0 #0d0d0d;
 }
+
+/* ─── Load more button ───────────────────────────────────── */
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0 1rem;
+}
+.load-more {
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0d0d0d;
+  background: #ff2d6f;
+  border: 3px solid #0d0d0d;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 #0d0d0d;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.load-more:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 #0d0d0d;
+}
+.load-more:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 #0d0d0d;
+}
+.load-more:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

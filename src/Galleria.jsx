@@ -52,19 +52,26 @@ async function fetchTopCollections(chain, _limit = 25) {
   return (baked[chain] || []).filter(c => c.id && c.name);
 }
 
-async function fetchTokens(chain, collectionId, limit = 30) {
-  const k = `tok:${chain}:${collectionId}:${limit}`;
+async function fetchTokens(chain, collectionId, limit = 60, pageKey = null) {
+  const k = `tok:${chain}:${collectionId}:${limit}:${pageKey || "first"}`;
   const c = cacheGet(k); if (c) return c;
   try {
-    const r = await fetch(
-      `${PROXY}/${chain}/tokens?collection=${encodeURIComponent(collectionId)}&limit=${limit}`
-    );
-    if (!r.ok) return [];
+    const params = new URLSearchParams({
+      collection: collectionId,
+      limit: String(limit),
+    });
+    if (pageKey) params.set("pageKey", pageKey);
+    const r = await fetch(`${PROXY}/${chain}/tokens?${params}`);
+    if (!r.ok) return { tokens: [], pageKey: null, totalSupply: null };
     const data = await r.json();
-    const out = (data.tokens || []).filter(t => t.img);
+    const out = {
+      tokens: (data.tokens || []).filter(t => t.img),
+      pageKey: data.pageKey || null,
+      totalSupply: data.totalSupply || null,
+    };
     cacheSet(k, out);
     return out;
-  } catch { return []; }
+  } catch { return { tokens: [], pageKey: null, totalSupply: null }; }
 }
 
 function marketplaceUrl(chain, contract, tokenId) {
@@ -217,7 +224,7 @@ function Galleria() {
         <div className="wrap footer-inner">
           <div className="footer-title">NFT GALLERIA ©</div>
           <div className="f-mono footer-meta">DATA: RESERVOIR</div>
-          <div className="f-mono footer-meta">MMXXVI — TOP 25 × 3</div>
+          <div className="f-mono footer-meta">MMXXVI — ON VIEW</div>
         </div>
       </footer>
     </div>
@@ -236,7 +243,7 @@ function HomeScreen({ mounted, onPick }) {
               <span className="italic">GALLE<span className="kick">R</span>IA</span>
             </h1>
             <div className="badge-est chunky sticker wobble f-big" style={{ transform: "rotate(14deg)" }}>
-              TOP 25
+              ON VIEW
             </div>
             <div className="badge-skate chunky sticker wobble f-mono" style={{ transform: "rotate(-8deg)" }}>
               ★ three chains · live ★
@@ -247,7 +254,7 @@ function HomeScreen({ mounted, onPick }) {
             <span>—</span>
             <span>ETH / SOL / APE</span>
             <span>—</span>
-            <span className="underline-hot">TOP 25 PER CHAIN</span>
+            <span className="underline-hot">CURATED PER CHAIN</span>
             <span>—</span>
             <span className="pill-acid">LIVE DATA</span>
           </div>
@@ -286,8 +293,8 @@ function HomeScreen({ mounted, onPick }) {
               <div className="about-card sticker rot-2">
                 <div className="about-card-eyebrow f-mono">ABOUT THIS ISSUE</div>
                 <div className="about-card-body f-mono">
-                  Top 25 collections per chain, ranked by 24h volume —
-                  pulled live from Reservoir. A gallery, not a marketplace.
+                  A curated room of collections per chain — hand-picked,
+                  pulled live from on-chain. A gallery, not a marketplace.
                   Just the art.
                 </div>
               </div>
@@ -325,7 +332,7 @@ function ChainCard({ chain, index, mounted, onClick }) {
         </div>
         <div className="chain-card-enter f-mono">
           <span className="sq" style={{ background: chain.hot }} />
-          <span>TOP 25 · ENTER →</span>
+          <span>ENTER GALLERY →</span>
         </div>
       </div>
     </button>
@@ -361,15 +368,15 @@ function ChainScreen({ chainId, onBack, onOpen }) {
           </button>
           <div className="chain-masthead-row">
             <div>
-              <div className="chain-eyebrow f-mono">§ TOP 25 ON —</div>
+              <div className="chain-eyebrow f-mono">§ ON VIEW —</div>
               <h2 className="mega">{chain.name}</h2>
             </div>
             <div className="chain-counter">
               <div className="chain-counter-pill sticker">
-                {chain.tag} · 25
+                {chain.tag} · {cols.length || "—"}
               </div>
               <div className="chain-counter-label f-mono">
-                {loading ? "loading..." : "top collections"}
+                {loading ? "loading..." : "on view"}
               </div>
             </div>
           </div>
@@ -440,7 +447,10 @@ function CollectionCard({ col, index, chain, loaded, onClick }) {
 // ─────────────────────────────────────────────────────────────
 function CollectionScreen({ collection, chainId, onBack }) {
   const [pieces, setPieces] = useState([]);
+  const [pageKey, setPageKey] = useState(null);
+  const [totalSupply, setTotalSupply] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [focused, setFocused] = useState(null);
   const chain = CHAINS.find(c => c.id === chainId);
@@ -449,14 +459,25 @@ function CollectionScreen({ collection, chainId, onBack }) {
     let cancel = false;
     (async () => {
       setLoading(true);
-      const data = await fetchTokens(chainId, collection.id, 30);
+      const data = await fetchTokens(chainId, collection.id, 60, null);
       if (cancel) return;
-      setPieces(data);
+      setPieces(data.tokens);
+      setPageKey(data.pageKey);
+      setTotalSupply(data.totalSupply);
       setLoading(false);
       setTimeout(() => !cancel && setLoaded(true), 40);
     })();
     return () => { cancel = true; };
   }, [chainId, collection.id]);
+
+  async function loadMore() {
+    if (!pageKey || loadingMore) return;
+    setLoadingMore(true);
+    const data = await fetchTokens(chainId, collection.id, 60, pageKey);
+    setPieces(prev => [...prev, ...data.tokens]);
+    setPageKey(data.pageKey);
+    setLoadingMore(false);
+  }
 
   return (
     <main className="fade-in" style={{ position: "relative", zIndex: 10, paddingBottom: "5rem" }}>
@@ -481,9 +502,11 @@ function CollectionScreen({ collection, chainId, onBack }) {
               <h2 className="collection-title">{collection.name}</h2>
               <div className="collection-tags f-mono">
                 <span className="tag tag-ink">{chain.tag}</span>
-                {pieces.length > 0 && (
-                  <span className="tag tag-white">{pieces.length} PIECES</span>
-                )}
+                {totalSupply ? (
+                  <span className="tag tag-white">{totalSupply.toLocaleString()} PIECES</span>
+                ) : pieces.length > 0 ? (
+                  <span className="tag tag-white">{pieces.length} ON VIEW</span>
+                ) : null}
                 <span className="tag tag-hot">LIVE FROM RESERVOIR</span>
               </div>
             </div>
@@ -503,18 +526,31 @@ function CollectionScreen({ collection, chainId, onBack }) {
               <div className="state-body f-mono">No pieces on view rn. Try another collection.</div>
             </div>
           ) : (
-            <div className="pieces-grid">
-              {pieces.map((p, i) => (
-                <Piece
-                  key={p.id || i}
-                  piece={p}
-                  projectName={collection.name}
-                  index={i}
-                  loaded={loaded}
-                  onClick={() => setFocused(p)}
-                />
-              ))}
-            </div>
+            <>
+              <div className="pieces-grid">
+                {pieces.map((p, i) => (
+                  <Piece
+                    key={p.id || i}
+                    piece={p}
+                    projectName={collection.name}
+                    index={i}
+                    loaded={loaded}
+                    onClick={() => setFocused(p)}
+                  />
+                ))}
+              </div>
+              {pageKey && (
+                <div className="load-more-wrap">
+                  <button
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                    className="load-more sticker f-mono"
+                  >
+                    {loadingMore ? "LOADING..." : `LOAD MORE PIECES (${pieces.length}${totalSupply ? ` / ${totalSupply.toLocaleString()}` : ""})`}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

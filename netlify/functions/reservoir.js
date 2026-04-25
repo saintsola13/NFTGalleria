@@ -39,10 +39,11 @@ export default async (req) => {
 
     if (action === "tokens") {
       const collection = url.searchParams.get("collection");
-      const limit = clampInt(url.searchParams.get("limit"), 30, 1, 50);
+      const limit = clampInt(url.searchParams.get("limit"), 60, 1, 100);
+      const pageKey = url.searchParams.get("pageKey") || null;
       if (!collection) return json({ error: "missing collection" }, 400);
       if (chain === "solana") return await tokensSolana(collection, limit);
-      if (chain === "ethereum" || chain === "apechain") return await tokensAlchemy(chain, collection, limit);
+      if (chain === "ethereum" || chain === "apechain") return await tokensAlchemy(chain, collection, limit, pageKey);
       return json({ error: "unknown chain", chain }, 400);
     }
 
@@ -135,12 +136,18 @@ async function alchemyCollection(chain, contract) {
   }}));
 }
 
-async function tokensAlchemy(chain, contract, limit) {
+async function tokensAlchemy(chain, contract, limit, pageKey) {
   const key = process.env.ALCHEMY_API_KEY;
   if (!key) return json({ error: "ALCHEMY_API_KEY not configured", tokens: [] }, 500);
   const host = ALCHEMY_HOSTS[chain];
+  const params = new URLSearchParams({
+    contractAddress: contract,
+    withMetadata: "true",
+    limit: String(limit),
+  });
+  if (pageKey) params.set("pageKey", pageKey);
   const r = await fetch(
-    `https://${host}/nft/v3/${key}/getNFTsForContract?contractAddress=${encodeURIComponent(contract)}&withMetadata=true&limit=${limit}`,
+    `https://${host}/nft/v3/${key}/getNFTsForContract?${params}`,
     { headers: { accept: "application/json" } },
   );
   if (!r.ok) {
@@ -154,7 +161,11 @@ async function tokensAlchemy(chain, contract, limit) {
     name: n.name || null,
     img: n.image?.cachedUrl || n.image?.originalUrl || n.image?.thumbnailUrl || null,
   })).filter(t => t.img);
-  return cached(json({ tokens }));
+  return cached(json({
+    tokens,
+    pageKey: data.pageKey || null,
+    totalSupply: data.contract?.totalSupply ? parseInt(data.contract.totalSupply) : null,
+  }));
 }
 
 // ─── helpers ───────────────────────────────────────────────
