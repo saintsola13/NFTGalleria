@@ -496,3 +496,97 @@
   80% { opacity: 1; }
   100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
 }
+
+/* ─── Mobile cleanup pass (≤640px) ──────────────────────────
+   Tames oversized hero text, prevents horizontal overflow,
+   shrinks badges/title sizing so nothing clips off-screen. */
+@media (max-width: 640px) {
+  /* Prevent any horizontal scroll */
+  html, body { overflow-x: hidden; }
+
+  /* Hero title: smaller and tighter */
+  .mega {
+    font-size: clamp(3.5rem, 14vw, 6rem);
+    letter-spacing: -0.03em;
+  }
+
+  /* Hero padding tighter */
+  .hero { padding: 1.5rem 0 1.25rem; }
+  .hero-subrow {
+    margin-top: 1.25rem;
+    font-size: 0.65rem;
+    gap: 0.5rem;
+  }
+
+  /* Pull "EST" badge out of the way of title */
+  .badge-est {
+    top: 0.75rem; right: 0.75rem;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  /* Section titles */
+  .section-title { font-size: 2rem; }
+  .section-head { gap: 0.5rem; margin-bottom: 1.25rem; }
+
+  /* Chain card titles */
+  .chain-card-name { font-size: 1.5rem; line-height: 1; }
+  .chain-card-num { font-size: 0.7rem; }
+  .chain-card-tag { font-size: 0.65rem; }
+  .chain-card-enter { font-size: 0.65rem; }
+
+  /* Collection cards smaller */
+  .collection-card-title { font-size: 0.95rem; line-height: 1.15; }
+  .collection-card-meta { font-size: 0.6rem; }
+  .collection-card-num { font-size: 2rem; }
+
+  /* Collection (single) title page */
+  .collection-title { font-size: 2.4rem; line-height: 0.95; word-break: break-word; }
+  .collection-eyebrow { font-size: 0.7rem; }
+
+  /* Quote block */
+  .quote-text { font-size: 1.6rem; line-height: 1.15; }
+
+  /* Pieces grid: 2 columns on phones for readable thumbs */
+  .pieces-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .piece-num, .piece-project { font-size: 0.6rem; }
+
+  /* Marquee: smaller font so it doesn't stack */
+  .marquee { font-size: 0.85rem; }
+
+  /* Nav: avoid the live dot row crowding the logo */
+  .nav-inner { gap: 0.5rem; }
+  .nav-status { font-size: 0.6rem; }
+
+  /* Wrap container: tighter padding */
+  .wrap { padding-left: 1rem; padding-right: 1rem; }
+
+  /* Footer: stack tighter */
+  .footer-inner { gap: 0.5rem; padding: 1.5rem 0; }
+  .footer-title { font-size: 1.2rem; }
+  .footer-meta { font-size: 0.65rem; }
+
+  /* Lightbox tweaks */
+  .lightbox-card { max-width: 95vw; }
+  .lightbox-title { font-size: 1.4rem; }
+  .lightbox-sub { font-size: 0.7rem; }
+  .lightbox-actions { flex-direction: column; gap: 0.5rem; }
+
+  /* Bottom back button shrink */
+  .back-btn-bottom { font-size: 0.7rem; padding: 0.6rem 1rem; }
+  .back-bottom-wrap { padding: 2.5rem 0 1.5rem; margin-top: 2.5rem; }
+
+  /* Load more */
+  .load-more { font-size: 0.7rem; padding: 0.75rem 1rem; }
+
+  /* Tape badge "ON VIEW" — shrink */
+  .badge-est.chunky.f-big { font-size: 1rem; }
+}
+
+/* Even smaller phones (≤380px) — extra tightening */
+@media (max-width: 380px) {
+  .mega { font-size: clamp(2.8rem, 12vw, 4rem); }
+  .section-title { font-size: 1.6rem; }
+  .collection-title { font-size: 2rem; }
+  .quote-text { font-size: 1.3rem; }
+}
