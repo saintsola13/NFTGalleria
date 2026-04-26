@@ -411,6 +411,11 @@ function ChainScreen({ chainId, onBack, onOpen }) {
               ))}
             </div>
           )}
+          <div className="back-bottom-wrap">
+            <button onClick={onBack} className="back-btn back-btn-bottom f-mono hoverline">
+              ← BACK TO ALL CHAINS
+            </button>
+          </div>
         </div>
       </section>
     </main>
@@ -554,6 +559,11 @@ function CollectionScreen({ collection, chainId, onBack }) {
               )}
             </>
           )}
+          <div className="back-bottom-wrap">
+            <button onClick={onBack} className="back-btn back-btn-bottom f-mono hoverline">
+              ← BACK TO {chain?.name?.toUpperCase() || "COLLECTIONS"}
+            </button>
+          </div>
         </div>
       </section>
 

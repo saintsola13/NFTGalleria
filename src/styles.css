@@ -436,3 +436,33 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ─── Bottom back button ─────────────────────────────────── */
+.back-bottom-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0 2rem;
+  border-top: 2px dashed #0d0d0d;
+  margin-top: 4rem;
+}
+.back-btn-bottom {
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  background: #0d0d0d;
+  color: #faf6ed;
+  border: 3px solid #0d0d0d;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 #ff2d6f;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.back-btn-bottom:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 #ff2d6f;
+}
+.back-btn-bottom:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 #ff2d6f;
+}
