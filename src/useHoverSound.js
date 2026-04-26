@@ -16,7 +16,8 @@ function getCtx() {
   return audioCtx;
 }
 
-// Soft "tick" sound — short, low-volume, gallery-appropriate
+// Soft muted "thock" — low-frequency, low-pass filtered, gentle envelope.
+// Goes for a felt-pad / muted-keyboard tap rather than a UI chirp.
 function playTick() {
   const ctx = getCtx();
   if (!ctx) return;
@@ -24,22 +25,29 @@ function playTick() {
   const now = ctx.currentTime;
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
 
-  // High-pitched soft click using a short sine burst with envelope
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(2400, now);
-  osc.frequency.exponentialRampToValueAtTime(1800, now + 0.04);
+  // Low triangle wave — woody, soft
+  osc.type = "triangle";
+  osc.frequency.setValueAtTime(420, now);
+  osc.frequency.exponentialRampToValueAtTime(280, now + 0.06);
 
-  // Quick attack, fast decay — barely audible "tick"
+  // Low-pass filter to kill the brightness
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(900, now);
+  filter.Q.value = 0.5;
+
+  // Gentle attack, mellow decay — felt pad tap vibe
   gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(0.06, now + 0.005);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+  gain.gain.linearRampToValueAtTime(0.025, now + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
 
-  osc.connect(gain);
+  osc.connect(filter);
+  filter.connect(gain);
   gain.connect(ctx.destination);
 
   osc.start(now);
-  osc.stop(now + 0.06);
+  osc.stop(now + 0.1);
 }
 
 // Selectors that count as "interactive"
