@@ -466,3 +466,33 @@
   transform: translate(2px, 2px);
   box-shadow: 3px 3px 0 #ff2d6f;
 }
+
+/* ─── Mobile swipe hint (only shows on touch devices, fades after 4s) ───── */
+.swipe-hint {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0d0d0d;
+  color: #faf6ed;
+  padding: 0.5rem 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 2px solid #ff2d6f;
+  z-index: 100;
+  pointer-events: none;
+  animation: swipeHintFade 4s ease-out forwards;
+}
+@media (hover: none) and (pointer: coarse) {
+  .swipe-hint { display: block; }
+}
+@keyframes swipeHintFade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}

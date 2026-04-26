@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { ETHEREUM, APECHAIN, SOLANA } from "./curated.js";
 import baked from "./data/collections.json";
 import { useHoverSound } from "./useHoverSound.js";
+import { useSwipeNav } from "./useSwipeNav.js";
 
 // ─────────────────────────────────────────────────────────────
 //  NFT GALLERIA  —  Top 25 × 3 Chains
@@ -185,6 +186,21 @@ function Galleria() {
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t); }, []);
   useHoverSound();
 
+  // Swipe right → back one level. Swipe left → advance to next sibling chain (only on chain screen).
+  const goBack = () => {
+    if (view.screen === "collection") setView({ screen: "chain", chain: view.chain });
+    else if (view.screen === "chain") setView({ screen: "home" });
+  };
+  const goForward = () => {
+    if (view.screen === "chain") {
+      const order = ["ethereum", "solana", "apechain"];
+      const idx = order.indexOf(view.chain);
+      const next = order[(idx + 1) % order.length];
+      setView({ screen: "chain", chain: next });
+    }
+  };
+  useSwipeNav({ onSwipeRight: goBack, onSwipeLeft: goForward });
+
   return (
     <div>
       <div className="paper" />
@@ -208,18 +224,28 @@ function Galleria() {
         <HomeScreen mounted={mounted} onPick={(id) => setView({ screen: "chain", chain: id })} />
       )}
       {view.screen === "chain" && (
-        <ChainScreen
-          chainId={view.chain}
-          onBack={() => setView({ screen: "home" })}
-          onOpen={(col) => setView({ screen: "collection", chain: view.chain, col })}
-        />
+        <>
+          <ChainScreen
+            chainId={view.chain}
+            onBack={() => setView({ screen: "home" })}
+            onOpen={(col) => setView({ screen: "collection", chain: view.chain, col })}
+          />
+          <div key={`hint-${view.chain}`} className="swipe-hint">
+            ← SWIPE · BACK · NEXT CHAIN →
+          </div>
+        </>
       )}
       {view.screen === "collection" && (
-        <CollectionScreen
-          collection={view.col}
-          chainId={view.chain}
-          onBack={() => setView({ screen: "chain", chain: view.chain })}
-        />
+        <>
+          <CollectionScreen
+            collection={view.col}
+            chainId={view.chain}
+            onBack={() => setView({ screen: "chain", chain: view.chain })}
+          />
+          <div key={`hint-${view.col?.id}`} className="swipe-hint">
+            ← SWIPE RIGHT TO GO BACK
+          </div>
+        </>
       )}
 
       <footer className="footer">
