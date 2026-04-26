@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { ETHEREUM, APECHAIN, SOLANA } from "./curated.js";
 import baked from "./data/collections.json";
+import { useHoverSound } from "./useHoverSound.js";
 
 // ─────────────────────────────────────────────────────────────
 //  NFT GALLERIA  —  Top 25 × 3 Chains
@@ -182,6 +183,7 @@ function Galleria() {
   const [view, setView] = useState({ screen: "home" });
   const [mounted, setMounted] = useState(false);
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t); }, []);
+  useHoverSound();
 
   return (
     <div>
