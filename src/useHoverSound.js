@@ -39,8 +39,8 @@ function playTick() {
 
   // Gentle attack, mellow decay — felt pad tap vibe
   gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(0.025, now + 0.012);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+  gain.gain.linearRampToValueAtTime(0.06, now + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
 
   osc.connect(filter);
   filter.connect(gain);
@@ -83,6 +83,10 @@ export function useHoverSound() {
       lastHoverTarget = target;
       lastPlayedAt = now;
       playTick();
+      // Haptic feedback on supported devices (mostly mobile/touch laptops)
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        try { navigator.vibrate(8); } catch {}
+      }
     }
 
     function onMouseOut(e) {
