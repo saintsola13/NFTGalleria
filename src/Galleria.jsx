@@ -5,16 +5,15 @@ import { useHoverSound } from "./useHoverSound.js";
 import { useSwipeNav } from "./useSwipeNav.js";
 
 // ─────────────────────────────────────────────────────────────
-//  NFT GALLERIA  —  Top 25 × 3 Chains
+//  OKINA GALLERIA  —  Curated communities
 //  Curated as an art gallery. No floors. No prices. Just art.
 //
-//  Data: Reservoir (ETH / Solana / ApeChain) via Netlify Function
+//  Data: baked collections.json + Reservoir token grids via
 //  proxy at /api/reservoir/<chain>/<reservoir-path>
 // ─────────────────────────────────────────────────────────────
 
 const CHAINS = [
   { id: "ethereum", name: "ETHEREUM", tag: "ETH", color: "#00ff88", hot: "#ff2d6f" },
-  { id: "solana",   name: "SOLANA",   tag: "SOL", color: "#b8ff00", hot: "#9945ff" },
   { id: "apechain", name: "APECHAIN", tag: "APE", color: "#ff6b00", hot: "#1a1aff" },
 ];
 
@@ -162,7 +161,7 @@ function ImgWithFallback({ src, alt, className, style }) {
 function Marquee({ items }) {
   // Duplicate items twice so the loop is seamless.
   const list = useMemo(() => {
-    const arr = items && items.length ? items : ["NFT GALLERIA"];
+    const arr = items && items.length ? items : ["OKINA GALLERIA"];
     return [...arr, ...arr];
   }, [items]);
   return (
@@ -193,7 +192,7 @@ function Galleria() {
   };
   const goForward = () => {
     if (view.screen === "chain") {
-      const order = ["ethereum", "solana", "apechain"];
+      const order = CHAINS.map(c => c.id);
       const idx = order.indexOf(view.chain);
       const next = order[(idx + 1) % order.length];
       setView({ screen: "chain", chain: next });
@@ -211,7 +210,7 @@ function Galleria() {
         <div className="wrap nav-inner">
           <button onClick={() => setView({ screen: "home" })} className="nav-logo">
             <span className="nav-logo-mark spin-slow" />
-            <span className="f-big nav-title">NFT GALLERIA</span>
+            <span className="f-big nav-title">OKINA GALLERIA</span>
           </button>
           <div className="nav-status f-mono">
             <span className="dot pulse" />
@@ -250,7 +249,7 @@ function Galleria() {
 
       <footer className="footer">
         <div className="wrap footer-inner">
-          <div className="footer-title">NFT GALLERIA ©</div>
+          <div className="footer-title">OKINA GALLERIA ©</div>
           <div className="f-mono footer-meta">DATA: RESERVOIR</div>
           <div className="f-mono footer-meta">MMXXVI — ON VIEW</div>
         </div>
@@ -267,22 +266,22 @@ function HomeScreen({ mounted, onPick }) {
         <div className={`wrap rise ${mounted ? "in" : ""}`}>
           <div style={{ position: "relative" }}>
             <h1 className="mega hero-title">
-              <span style={{ display: "block" }}>NFT</span>
+              <span style={{ display: "block" }}>OKINA</span>
               <span className="italic">GALLE<span className="kick">R</span>IA</span>
             </h1>
             <div className="badge-est chunky sticker wobble f-big" style={{ transform: "rotate(14deg)" }}>
               ON VIEW
             </div>
             <div className="badge-skate chunky sticker wobble f-mono" style={{ transform: "rotate(-8deg)" }}>
-              ★ three chains · live ★
+              ★ five communities · live ★
             </div>
           </div>
           <div className="hero-subrow f-mono">
             <span className="pill-black">ISSUE N° I</span>
             <span>—</span>
-            <span>ETH / SOL / APE</span>
+            <span>ETH / APE</span>
             <span>—</span>
-            <span className="underline-hot">CURATED PER CHAIN</span>
+            <span className="underline-hot">CURATED COMMUNITIES</span>
             <span>—</span>
             <span className="pill-acid">LIVE DATA</span>
           </div>
@@ -321,9 +320,9 @@ function HomeScreen({ mounted, onPick }) {
               <div className="about-card sticker rot-2">
                 <div className="about-card-eyebrow f-mono">ABOUT THIS ISSUE</div>
                 <div className="about-card-body f-mono">
-                  A curated room of collections per chain — hand-picked,
-                  pulled live from on-chain. A gallery, not a marketplace.
-                  Just the art.
+                  Saints of LA, Chumpz, HMN5, Steezy Ape Gang, Forever
+                  Undead — hand-picked, on-chain. A gallery, not a
+                  marketplace. Just the art.
                 </div>
               </div>
             </div>
