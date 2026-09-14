@@ -248,13 +248,14 @@ export default function Galleria() {
                 alt="Okina — We are the sum of our curated experiences."
                 className="about-banner-img"
               />
-              <div className="about-socials">
-                {SOCIALS.map((s) => (
-                  <a key={s.handle} href={s.href} target="_blank" rel="noreferrer" className="about-social-link">
-                    {s.handle}
-                  </a>
-                ))}
-              </div>
+            </div>
+            <div className="about-socials" aria-label="Okina on X">
+              {SOCIALS.map((s) => (
+                <a key={s.handle} href={s.href} target="_blank" rel="noreferrer" className="about-social-tile">
+                  <span className="about-social-x" aria-hidden="true">𝕏</span>
+                  <span className="about-social-handle">{s.handle}</span>
+                </a>
+              ))}
             </div>
           </div>
         </div>
