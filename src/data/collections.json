@@ -1,19 +1,19 @@
 {
   "ethereum": [
     {
-      "id": "0x7caB6c0E4DC14b995901F5D672Cdcc8469CC459D",
-      "name": "Saints of LA | ETERNAL",
+      "id": "0x7cab6c0e4dc14b995901f5d672cdcc8469cc459d",
+      "name": "Saints of LA",
       "pfp": "https://i2c.seadn.io/collection/saints-of-la-eternal/image_type_logo/cc6b02bca622363df9eea8e7328215/77cc6b02bca622363df9eea8e7328215.jpeg",
       "chain": "ethereum"
     },
     {
-      "id": "0x70789e18A75611A9516d6251D650D096740a9e07",
+      "id": "0x70789e18a75611a9516d6251d650d096740a9e07",
       "name": "Steezy Ape Gang",
       "pfp": "https://i2c.seadn.io/ethereum/115898c934864ca4bd9f4cbec5661f41/369bf526c110f8815de4ff18564dc5/a5369bf526c110f8815de4ff18564dc5.jpeg",
       "chain": "ethereum"
     },
     {
-      "id": "0x32fC5Bcabc1F78308be11754493c49116c0fa35f",
+      "id": "0x32fc5bcabc1f78308be11754493c49116c0fa35f",
       "name": "HMN5",
       "pfp": "https://i2c.seadn.io/ethereum/e5267c8e24ac416e9d24c38cfc71ab64/e0f1f9baecedcec8674e307d5fa1c1/59e0f1f9baecedcec8674e307d5fa1c1.png",
       "chain": "ethereum"
@@ -21,36 +21,36 @@
     {
       "id": "0xe25399c20ce2e4d03339bdae701138856696f8cf",
       "name": "Kushlings",
-      "pfp": null,
+      "pfp": "https://i2c.seadn.io/ethereum/0xe25399c20ce2e4d03339bdae701138856696f8cf/a8d1b2503803a898216325fccdc249/44a8d1b2503803a898216325fccdc249.gif",
       "chain": "ethereum"
     },
     {
-      "id": "0x495f947276749Ce646f68AC8c248420045cb7b5e",
+      "id": "0x495f947276749ce646f68ac8c248420045cb7b5e",
       "name": "Bryan Vee Originals",
-      "pfp": null,
+      "pfp": "https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/f0a9a0207a5651cd010ebfb9370194/60f0a9a0207a5651cd010ebfb9370194.png",
       "chain": "ethereum"
     },
     {
       "id": "0x83296c35ac338ed6c4ab7db1bb3d6ca90ae3b9c7",
       "name": "Steezy Genesis",
-      "pfp": null,
+      "pfp": "https://i2c.seadn.io/ethereum/aa276f3f3e534e09b54657aee56aba96/116fa450bbf0f8944d9d24c274e16e/8f116fa450bbf0f8944d9d24c274e16e.jpeg",
       "chain": "ethereum"
     }
   ],
   "apechain": [
     {
       "id": "0xa9a1d086623475595A02991664742E4A1cbAFcb8",
-      "name": "Chumpz by Saints of LA",
-      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/0814b371a40458f3a0ba910aa2cb5dd5",
+      "name": "Chumpz",
+      "pfp": "https://nft2-cdn.alchemy.com/apechain-mainnet/0814b371a40458f3a0ba910aa2cb5dd5",
       "chain": "apechain"
     },
     {
       "id": "0x0178A9d0b0CBa1B2Ede3AFDb6dd021dB24fF4240",
       "name": "Forever Undead",
-      "pfp": "https://nft-cdn.alchemy.com/apechain-mainnet/1da377f09d41f23a8f9c31fff616b194",
+      "pfp": "https://nft2-cdn.alchemy.com/apechain-mainnet/1da377f09d41f23a8f9c31fff616b194",
       "chain": "apechain"
     }
   ],
   "solana": [],
-  "builtAt": "2026-09-14T19:46:05.000Z"
+  "builtAt": "2026-09-14T20:21:08.000Z"
 }
