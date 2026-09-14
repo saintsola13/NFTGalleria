@@ -4,6 +4,13 @@ import baked from "./data/collections.json";
 const PROXY = "/api/reservoir";
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
+const SOCIALS = [
+  { handle: "@okinalabs", href: "https://x.com/okinalabs" },
+  { handle: "@hmn5_NFT", href: "https://x.com/hmn5_NFT" },
+  { handle: "@stzyapegang", href: "https://x.com/stzyapegang" },
+  { handle: "@stzymfg", href: "https://x.com/stzymfg" },
+];
+
 function allCollections() {
   return [
     ...(baked.ethereum || []).map((c) => ({ ...c, chain: "ethereum" })),
@@ -215,6 +222,17 @@ export default function Galleria() {
           )}
         </main>
       )}
+
+      <footer className="okina-banner">
+        <img src="/okina-banner.jpg" alt="Okina — We are the sum of our curated experiences." className="okina-banner-img" />
+        <div className="okina-banner-socials">
+          {SOCIALS.map((s) => (
+            <a key={s.handle} href={s.href} target="_blank" rel="noreferrer" className="okina-banner-link">
+              {s.handle}
+            </a>
+          ))}
+        </div>
+      </footer>
     </div>
   );
 }
