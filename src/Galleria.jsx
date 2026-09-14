@@ -147,7 +147,7 @@ export default function Galleria() {
   }
 
   return (
-    <div className="shell">
+    <div className={`shell${active ? " is-open" : ""}`}>
       <div className="okina-bg" aria-hidden="true" />
 
       <header className="topbar">
@@ -156,72 +156,76 @@ export default function Galleria() {
 
       <GlitchTitle onClick={() => setActive(null)} />
 
-      <aside className="rail" aria-label="Collections">
-        {collections.map((col) => {
-          const selected = active?.id === col.id && active?.chain === col.chain;
-          return (
-            <button
-              key={`${col.chain}:${col.id}`}
-              type="button"
-              className={`rail-card ${selected ? "is-active" : ""}`}
-              onClick={() => setActive(col)}
-            >
-              <div className="rail-card-media">
-                <ImgWithFallback src={col.pfp} alt="" className="rail-card-img" />
-              </div>
-              <div className="rail-card-meta">
-                <div className="rail-card-name">{col.name}</div>
-                <div className="rail-card-chain">{col.chain === "apechain" ? "APE" : "ETH"}</div>
-              </div>
-            </button>
-          );
-        })}
-      </aside>
+      <div className="workspace">
+        {active ? (
+          <main className="stage">
+            <div className="stage-head">
+              <button type="button" className="stage-back" onClick={() => setActive(null)}>
+                ← collections
+              </button>
+              <h2 className="stage-title">{active.name}</h2>
+            </div>
 
-      {active && (
-        <main className="stage">
-          <div className="stage-head">
-            <button type="button" className="stage-back" onClick={() => setActive(null)}>
-              ← collections
-            </button>
-            <h2 className="stage-title">{active.name}</h2>
-          </div>
+            {loading ? (
+              <div className="stage-state">loading jpegs…</div>
+            ) : tokens.length === 0 ? (
+              <div className="stage-state">no tokens yet — alchemy key may be missing on Pages</div>
+            ) : (
+              <>
+                <div className="token-grid">
+                  {tokens.map((t) => {
+                    const href = marketplaceUrl(active.chain, active.id, t.tokenId);
+                    const inner = (
+                      <>
+                        <ImgWithFallback src={t.img} alt={t.name || `#${t.tokenId}`} className="token-img" />
+                        <div className="token-cap">#{t.tokenId}</div>
+                      </>
+                    );
+                    return href ? (
+                      <a key={t.id} className="token-card" href={href} target="_blank" rel="noreferrer">
+                        {inner}
+                      </a>
+                    ) : (
+                      <div key={t.id} className="token-card">
+                        {inner}
+                      </div>
+                    );
+                  })}
+                </div>
+                {pageKey && (
+                  <button type="button" className="load-more" onClick={loadMore} disabled={loadingMore}>
+                    {loadingMore ? "loading…" : "load more"}
+                  </button>
+                )}
+              </>
+            )}
+          </main>
+        ) : (
+          <div className="stage stage-empty" aria-hidden="true" />
+        )}
 
-          {loading ? (
-            <div className="stage-state">loading jpegs…</div>
-          ) : tokens.length === 0 ? (
-            <div className="stage-state">no tokens yet — alchemy key may be missing on Pages</div>
-          ) : (
-            <>
-              <div className="token-grid">
-                {tokens.map((t) => {
-                  const href = marketplaceUrl(active.chain, active.id, t.tokenId);
-                  const inner = (
-                    <>
-                      <ImgWithFallback src={t.img} alt={t.name || `#${t.tokenId}`} className="token-img" />
-                      <div className="token-cap">#{t.tokenId}</div>
-                    </>
-                  );
-                  return href ? (
-                    <a key={t.id} className="token-card" href={href} target="_blank" rel="noreferrer">
-                      {inner}
-                    </a>
-                  ) : (
-                    <div key={t.id} className="token-card">
-                      {inner}
-                    </div>
-                  );
-                })}
-              </div>
-              {pageKey && (
-                <button type="button" className="load-more" onClick={loadMore} disabled={loadingMore}>
-                  {loadingMore ? "loading…" : "load more"}
-                </button>
-              )}
-            </>
-          )}
-        </main>
-      )}
+        <aside className="rail" aria-label="Collections">
+          {collections.map((col) => {
+            const selected = active?.id === col.id && active?.chain === col.chain;
+            return (
+              <button
+                key={`${col.chain}:${col.id}`}
+                type="button"
+                className={`rail-card ${selected ? "is-active" : ""}`}
+                onClick={() => setActive(col)}
+              >
+                <div className="rail-card-media">
+                  <ImgWithFallback src={col.pfp} alt="" className="rail-card-img" />
+                </div>
+                <div className="rail-card-meta">
+                  <div className="rail-card-name">{col.name}</div>
+                  <div className="rail-card-chain">{col.chain === "apechain" ? "APE" : "ETH"}</div>
+                </div>
+              </button>
+            );
+          })}
+        </aside>
+      </div>
 
       <footer className="okina-banner">
         <img src="/okina-banner.jpg" alt="Okina — We are the sum of our curated experiences." className="okina-banner-img" />
