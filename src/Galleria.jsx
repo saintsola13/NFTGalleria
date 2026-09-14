@@ -202,6 +202,7 @@ function Galleria() {
 
   return (
     <div>
+      <div className="okina-bg" aria-hidden="true" />
       <div className="paper" />
 
       <Marquee items={allMarqueeNames()} />
