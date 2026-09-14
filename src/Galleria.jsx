@@ -116,6 +116,14 @@ export default function Galleria() {
   const [loading, setLoading] = useState(false);
   const [pageKey, setPageKey] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [about, setAbout] = useState(false);
+
+  useEffect(() => {
+    if (!about) return;
+    const onKey = (e) => { if (e.key === "Escape") setAbout(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [about]);
 
   useEffect(() => {
     if (!active) {
@@ -154,7 +162,7 @@ export default function Galleria() {
         <Marquee names={names} />
       </header>
 
-      <GlitchTitle onClick={() => setActive(null)} />
+      <GlitchTitle onClick={() => setAbout(true)} />
 
       <div className="workspace">
         {active ? (
@@ -227,16 +235,30 @@ export default function Galleria() {
         </aside>
       </div>
 
-      <footer className="okina-banner">
-        <img src="/okina-banner.jpg" alt="Okina — We are the sum of our curated experiences." className="okina-banner-img" />
-        <div className="okina-banner-socials">
-          {SOCIALS.map((s) => (
-            <a key={s.handle} href={s.href} target="_blank" rel="noreferrer" className="okina-banner-link">
-              {s.handle}
-            </a>
-          ))}
+      {about && (
+        <div className="about-overlay" role="dialog" aria-modal="true" aria-label="About Okina">
+          <button type="button" className="about-backdrop" aria-label="Close" onClick={() => setAbout(false)} />
+          <div className="about-panel">
+            <button type="button" className="about-close" onClick={() => setAbout(false)}>
+              ✕ close
+            </button>
+            <div className="about-banner">
+              <img
+                src="/okina-banner.jpg"
+                alt="Okina — We are the sum of our curated experiences."
+                className="about-banner-img"
+              />
+              <div className="about-socials">
+                {SOCIALS.map((s) => (
+                  <a key={s.handle} href={s.href} target="_blank" rel="noreferrer" className="about-social-link">
+                    {s.handle}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </footer>
+      )}
     </div>
   );
 }
