@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import baked from "./data/collections.json";
 
 const PROXY = "/api/reservoir";
@@ -65,6 +65,60 @@ function marketplaceUrl(chain, contract, tokenId) {
   if (chain === "ethereum") return `https://opensea.io/assets/ethereum/${contract}/${tokenId}`;
   if (chain === "apechain") return `https://opensea.io/assets/ape_chain/${contract}/${tokenId}`;
   return null;
+}
+
+
+const SOUND_KEY = "okina-sound-on";
+const SOUND_SRC = "/okina-bg.mp3";
+
+function SoundToggle() {
+  const audioRef = useRef(null);
+  const [on, setOn] = useState(() => {
+    try {
+      return localStorage.getItem(SOUND_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el) return;
+    el.loop = true;
+    el.volume = 0.55;
+    if (on) {
+      const play = el.play();
+      if (play && typeof play.catch === "function") play.catch(() => setOn(false));
+    } else {
+      el.pause();
+    }
+    try {
+      localStorage.setItem(SOUND_KEY, on ? "1" : "0");
+    } catch {}
+  }, [on]);
+
+  const toggle = useCallback(() => {
+    setOn((v) => !v);
+  }, []);
+
+  return (
+    <>
+      <audio ref={audioRef} src={SOUND_SRC} preload="metadata" playsInline />
+      <button
+        type="button"
+        className={`sound-toggle${on ? " is-on" : ""}`}
+        onClick={toggle}
+        aria-pressed={on}
+        aria-label={on ? "Sound on — tap to mute" : "Sound off — tap to play"}
+        title={on ? "Sound on" : "Sound off"}
+      >
+        <span className="sound-toggle-icon" aria-hidden="true">
+          {on ? "♪" : "🔇"}
+        </span>
+        <span className="sound-toggle-label">{on ? "SOUND ON" : "SOUND OFF"}</span>
+      </button>
+    </>
+  );
 }
 
 function Marquee({ names }) {
@@ -163,6 +217,7 @@ export default function Galleria() {
       </header>
 
       <GlitchTitle onClick={() => setAbout(true)} />
+      <SoundToggle />
 
       <div className="workspace">
         {active ? (

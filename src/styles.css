@@ -126,6 +126,50 @@ body {
   93% { transform: translate(2px, -1px); clip-path: inset(10% 0 50% 0); }
 }
 
+.sound-toggle {
+  position: absolute;
+  top: calc(var(--top-h) + var(--safe-top) + 0.7rem);
+  right: 0.85rem;
+  z-index: 46;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(255, 107, 0, 0.55);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(10px);
+  color: var(--cream);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(255, 107, 0, 0.18);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+.sound-toggle:hover {
+  border-color: var(--acid);
+  box-shadow: 0 0 20px rgba(180, 255, 0, 0.22);
+}
+.sound-toggle.is-on {
+  border-color: var(--acid);
+  color: var(--acid);
+  box-shadow: 0 0 18px rgba(180, 255, 0, 0.28);
+}
+.sound-toggle-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.sound-toggle-label {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600;
+}
+@media (max-width: 520px) {
+  .sound-toggle-label { display: none; }
+  .sound-toggle { padding: 0.5rem 0.65rem; }
+  .glitch-title { max-width: calc(100% - 4.5rem); }
+}
+
 .workspace {
   position: absolute;
   top: calc(var(--top-h) + var(--safe-top));
