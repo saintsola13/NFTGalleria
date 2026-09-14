@@ -220,11 +220,40 @@ export default function Galleria() {
       <SoundToggle />
 
       <div className="workspace">
+        <aside className="rail" aria-label="Communities">
+          <div className="rail-head">
+            <span className="rail-kicker">Communities</span>
+            <span className="rail-count">{collections.length}</span>
+          </div>
+          <div className="rail-list">
+            {collections.map((col) => {
+              const selected = active?.id === col.id && active?.chain === col.chain;
+              return (
+                <button
+                  key={`${col.chain}:${col.id}`}
+                  type="button"
+                  className={`rail-card ${selected ? "is-active" : ""}`}
+                  onClick={() => setActive(col)}
+                >
+                  <div className="rail-card-media">
+                    <ImgWithFallback src={col.pfp} alt="" className="rail-card-img" />
+                  </div>
+                  <div className="rail-card-meta">
+                    <div className="rail-card-name">{col.name}</div>
+                    <div className="rail-card-chain">{col.chain === "apechain" ? "APECHAIN" : "ETHEREUM"}</div>
+                  </div>
+                  <span className="rail-card-chev" aria-hidden="true">›</span>
+                </button>
+              );
+            })}
+          </div>
+        </aside>
+
         {active ? (
           <main className="stage">
             <div className="stage-head">
               <button type="button" className="stage-back" onClick={() => setActive(null)}>
-                ← collections
+                ← communities
               </button>
               <h2 className="stage-title">{active.name}</h2>
             </div>
@@ -236,20 +265,20 @@ export default function Galleria() {
             ) : (
               <>
                 <div className="token-grid">
-                  {tokens.map((t) => {
-                    const href = marketplaceUrl(active.chain, active.id, t.tokenId);
+                  {tokens.map((tok) => {
+                    const href = marketplaceUrl(active.chain, active.id, tok.tokenId);
                     const inner = (
                       <>
-                        <ImgWithFallback src={t.img} alt={t.name || `#${t.tokenId}`} className="token-img" />
-                        <div className="token-cap">#{t.tokenId}</div>
+                        <ImgWithFallback src={tok.img} alt={tok.name || `#${tok.tokenId}`} className="token-img" />
+                        <div className="token-cap">#{tok.tokenId}</div>
                       </>
                     );
                     return href ? (
-                      <a key={t.id} className="token-card" href={href} target="_blank" rel="noreferrer">
+                      <a key={tok.id} className="token-card" href={href} target="_blank" rel="noreferrer">
                         {inner}
                       </a>
                     ) : (
-                      <div key={t.id} className="token-card">
+                      <div key={tok.id} className="token-card">
                         {inner}
                       </div>
                     );
@@ -266,28 +295,6 @@ export default function Galleria() {
         ) : (
           <div className="stage stage-empty" aria-hidden="true" />
         )}
-
-        <aside className="rail" aria-label="Collections">
-          {collections.map((col) => {
-            const selected = active?.id === col.id && active?.chain === col.chain;
-            return (
-              <button
-                key={`${col.chain}:${col.id}`}
-                type="button"
-                className={`rail-card ${selected ? "is-active" : ""}`}
-                onClick={() => setActive(col)}
-              >
-                <div className="rail-card-media">
-                  <ImgWithFallback src={col.pfp} alt="" className="rail-card-img" />
-                </div>
-                <div className="rail-card-meta">
-                  <div className="rail-card-name">{col.name}</div>
-                  <div className="rail-card-chain">{col.chain === "apechain" ? "APE" : "ETH"}</div>
-                </div>
-              </button>
-            );
-          })}
-        </aside>
       </div>
 
       {about && (
