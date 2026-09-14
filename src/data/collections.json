@@ -17,6 +17,24 @@
       "name": "HMN5",
       "pfp": "https://i2c.seadn.io/ethereum/e5267c8e24ac416e9d24c38cfc71ab64/e0f1f9baecedcec8674e307d5fa1c1/59e0f1f9baecedcec8674e307d5fa1c1.png",
       "chain": "ethereum"
+    },
+    {
+      "id": "0xe25399c20ce2e4d03339bdae701138856696f8cf",
+      "name": "Kushlings",
+      "pfp": null,
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x495f947276749Ce646f68AC8c248420045cb7b5e",
+      "name": "Bryan Vee Originals",
+      "pfp": null,
+      "chain": "ethereum"
+    },
+    {
+      "id": "0x83296c35ac338ed6c4ab7db1bb3d6ca90ae3b9c7",
+      "name": "Steezy Genesis",
+      "pfp": null,
+      "chain": "ethereum"
     }
   ],
   "apechain": [
@@ -34,5 +52,5 @@
     }
   ],
   "solana": [],
-  "builtAt": "2026-09-14T19:40:03.000Z"
+  "builtAt": "2026-09-14T19:46:05.000Z"
 }

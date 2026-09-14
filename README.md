@@ -7,8 +7,11 @@ Curated on-chain art gallery for Saints-family communities. Live at [nftgalleria
 1. **Saints of LA** (Ethereum)
 2. **Steezy Ape Gang** (Ethereum)
 3. **HMN5** (Ethereum)
-4. **Chumpz** on Ape (ApeChain)
-5. **Forever Undead** (ApeChain)
+4. **Kushlings** (Ethereum)
+5. **Bryan Vee Originals** (Ethereum)
+6. **Steezy Genesis** (Ethereum)
+7. **Chumpz** on Ape (ApeChain)
+8. **Forever Undead** (ApeChain)
 
 Add more later in `src/curated.js`, then run `npm run bake` and commit `src/data/collections.json`.
 

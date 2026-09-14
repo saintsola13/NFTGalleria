@@ -273,7 +273,7 @@ function HomeScreen({ mounted, onPick }) {
               ON VIEW
             </div>
             <div className="badge-skate chunky sticker wobble f-mono" style={{ transform: "rotate(-8deg)" }}>
-              ★ five communities · live ★
+              ★ eight communities · live ★
             </div>
           </div>
           <div className="hero-subrow f-mono">
@@ -321,8 +321,8 @@ function HomeScreen({ mounted, onPick }) {
                 <div className="about-card-eyebrow f-mono">ABOUT THIS ISSUE</div>
                 <div className="about-card-body f-mono">
                   Saints of LA, Chumpz, HMN5, Steezy Ape Gang, Forever
-                  Undead — hand-picked, on-chain. A gallery, not a
-                  marketplace. Just the art.
+                  Undead, Kushlings, Bryan Vee, Steezy Genesis —
+                  hand-picked, on-chain. A gallery, not a marketplace.
                 </div>
               </div>
             </div>
