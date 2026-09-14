@@ -12,7 +12,6 @@ a { color: inherit; text-decoration: none; }
 :root {
   --cream: #f4f1e8;
   --neon: #ff6b00;
-  --hot: #ff2d6f;
   --acid: #b8ff00;
   --top-h: 2.4rem;
   --banner-h: clamp(4.5rem, 12vh, 7.5rem);
@@ -118,7 +117,7 @@ body {
   animation: glitch-a 3s steps(2, end) infinite;
 }
 .glitch-title::after {
-  color: #ff2d6f;
+  color: var(--neon);
   opacity: 0.7;
   animation: glitch-b 2.4s steps(2, end) infinite;
 }
