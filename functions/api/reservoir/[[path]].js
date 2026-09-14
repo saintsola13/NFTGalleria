@@ -4,14 +4,36 @@ const ALCHEMY_HOSTS = {
   apechain: "apechain-mainnet.g.alchemy.com",
 };
 
+function parsePathParts(raw, pathname) {
+  let parts = [];
+  if (Array.isArray(raw)) {
+    parts = raw.flatMap((p) => String(p).split("/")).map((s) => s.trim()).filter(Boolean);
+  } else if (raw != null && String(raw).length) {
+    parts = String(raw).split("/").map((s) => s.trim()).filter(Boolean);
+  }
+  if (parts.length < 2 && pathname) {
+    const marker = "/api/reservoir/";
+    const i = pathname.indexOf(marker);
+    if (i >= 0) {
+      parts = pathname
+        .slice(i + marker.length)
+        .split("/")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+  }
+  return parts;
+}
+
 export async function onRequest(context) {
   try {
     const { request, env, params } = context;
     const url = new URL(request.url);
-    const parts = String(params.path || "").split("/").filter(Boolean);
+    // Pages optional catch-all [[path]] may be string[] or string; URL is the fallback.
+    const parts = parsePathParts(params?.path, url.pathname);
     const chain = parts[0];
     const action = parts[1];
-    if (!chain || !action) return json({ error: "missing chain or action" }, 400);
+    if (!chain || !action) return json({ error: "missing chain or action", path: params?.path ?? null }, 400);
 
     if (action === "collection") {
       const id = url.searchParams.get("id");
