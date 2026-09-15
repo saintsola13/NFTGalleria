@@ -140,10 +140,15 @@ function Marquee({ names }) {
   );
 }
 
-function GlitchTitle({ text = "Okina Galleria", onClick }) {
+function GlitchTitle({ onClick }) {
   return (
-    <button type="button" className="glitch-title" data-text={text} onClick={onClick} aria-label={text}>
-      <span className="glitch-title-text">{text}</span>
+    <button type="button" className="glitch-title" onClick={onClick} aria-label="Okina Galleria">
+      <img
+        src="/okina-title.png"
+        alt="Okina Galleria"
+        className="glitch-title-img"
+        draggable={false}
+      />
     </button>
   );
 }
