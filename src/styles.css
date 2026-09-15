@@ -416,7 +416,7 @@ body {
   .rail-list {
     flex: none;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 0.55rem;
     overflow-x: auto;
     overflow-y: hidden;
@@ -476,6 +476,7 @@ body {
   .rail-card-name {
     font-size: 0.52rem;
     line-height: 1.15;
+    min-height: calc(0.52rem * 1.15 * 2);
     white-space: normal;
     display: -webkit-box;
     -webkit-line-clamp: 2;
