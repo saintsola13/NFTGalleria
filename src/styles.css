@@ -365,9 +365,12 @@ body {
 }
 .rail-card.is-active .rail-card-chev { color: var(--acid); }
 
-/* Mobile / tablet: keep Okina neon bg visible; communities as bottom glass sheet */
+/* Mobile / tablet: neon mark owns the screen; communities = slim bottom PFP strip */
 @media (max-width: 900px) {
-  :root { --side-w: 100%; }
+  :root {
+    --side-w: 100%;
+    --dock-h: 7.6rem;
+  }
   .workspace {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
@@ -379,73 +382,123 @@ body {
     max-height: clamp(1.9rem, 8vw, 2.6rem);
   }
   .okina-bg {
-    /* full bleed behind everything on mobile home */
     top: calc(var(--top-h) + var(--safe-top));
-    bottom: var(--safe-bottom);
-    background-position: center 42%;
-    background-size: min(92vw, 520px) auto;
+    bottom: calc(var(--dock-h) + var(--safe-bottom));
+    background-position: center center;
+    background-size: min(88vw, 440px) auto;
   }
   .rail {
     grid-column: 1;
     grid-row: 1;
+    align-self: end;
+    height: auto;
     width: 100%;
     max-width: none;
     z-index: 25;
     border-right: none;
     box-shadow: none;
-    /* clear upper stage for the mark; dock communities low */
-    justify-content: flex-end;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    flex-direction: column;
+    gap: 0;
     padding: 0;
-    background: transparent;
-    pointer-events: none; /* let empty top pass through; cards re-enable */
-  }
-  .rail-head,
-  .rail-list {
-    pointer-events: auto;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.55) 35%,
+      rgba(0, 0, 0, 0.82) 100%
+    );
+    border-top: 1px solid rgba(255, 107, 0, 0.4);
   }
   .rail-head {
-    margin: 0 0.7rem 0.4rem;
-    padding: 0.45rem 0.55rem;
-    border: 1px solid rgba(255, 107, 0, 0.35);
-    border-radius: 8px 8px 0 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    display: none;
   }
   .rail-list {
-    gap: 0.4rem;
-    max-height: min(46dvh, 24rem);
-    margin: 0 0.7rem calc(0.65rem + var(--safe-bottom));
-    padding: 0.45rem 0.45rem 0.55rem;
-    border: 1px solid rgba(255, 107, 0, 0.35);
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    background: rgba(0, 0, 0, 0.52);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.35);
-  }
-  .rail-card {
-    grid-template-columns: 3.1rem 1fr auto;
+    flex: none;
+    flex-direction: row;
+    align-items: flex-end;
     gap: 0.55rem;
-    padding: 0.45rem 0.5rem;
-    min-height: 3.4rem;
-    background: rgba(0, 0, 0, 0.35);
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    margin: 0;
+    padding: 0.7rem 0.75rem calc(0.7rem + var(--safe-bottom));
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    scrollbar-width: none;
+  }
+  .rail-list::-webkit-scrollbar { display: none; }
+  .rail-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 0 0 auto;
+    width: 4.4rem;
+    gap: 0.35rem;
+    padding: 0.2rem 0.1rem;
+    min-height: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+  }
+  .rail-card:hover {
+    transform: none;
+    background: transparent;
+    border-color: transparent;
+  }
+  .rail-card.is-active {
+    background: transparent;
+    box-shadow: none;
+    border: 0;
   }
   .rail-card-media {
-    width: 3.1rem;
-    height: 3.1rem;
+    width: 3.55rem;
+    height: 3.55rem;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 107, 0, 0.7);
+    box-shadow: 0 0 14px rgba(255, 107, 0, 0.25);
   }
-  .rail-card-name { font-size: 0.72rem; }
-  .rail-card-chain { font-size: 0.55rem; }
+  .rail-card.is-active .rail-card-media {
+    border-color: var(--acid);
+    box-shadow: 0 0 16px rgba(184, 255, 0, 0.35);
+  }
+  .rail-card-meta {
+    width: 100%;
+    text-align: center;
+  }
+  .rail-card-name {
+    font-size: 0.52rem;
+    line-height: 1.15;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rail-card-chain,
+  .rail-card-chev {
+    display: none;
+  }
   .stage {
     grid-column: 1;
     grid-row: 1;
     z-index: 22;
     padding: 3.25rem 0.75rem calc(0.85rem + var(--safe-bottom));
-    background: rgba(0, 0, 0, 0.42);
+    background: rgba(0, 0, 0, 0.55);
   }
   .shell.is-open .rail { display: none; }
+  .shell.is-open .okina-bg {
+    bottom: var(--safe-bottom);
+    opacity: 0.22;
+  }
   .shell:not(.is-open) .stage-empty { display: none; }
   .shell:not(.is-open) .stage {
     background: transparent;
