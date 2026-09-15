@@ -69,7 +69,7 @@ function marketplaceUrl(chain, contract, tokenId) {
 
 
 const SOUND_KEY = "okina-sound-on";
-const SOUND_SRC = "/okina-bg.mp3";
+const SOUND_SRC = "/okina-bg.mp3?v=2";
 
 function SoundToggle() {
   const audioRef = useRef(null);
