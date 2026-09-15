@@ -271,7 +271,7 @@ export default function Galleria() {
               <>
                 <div className="token-grid">
                   {tokens.map((tok) => {
-                    const href = marketplaceUrl(active.chain, active.id, tok.tokenId);
+                    const href = marketplaceUrl(active.chain, tok.contract || active.contract || active.id, tok.tokenId);
                     const inner = (
                       <>
                         <ImgWithFallback src={tok.img} alt={tok.name || `#${tok.tokenId}`} className="token-img" />

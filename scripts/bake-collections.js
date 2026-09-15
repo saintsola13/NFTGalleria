@@ -22,10 +22,41 @@ const ALCHEMY_HOSTS = {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchAlchemy(chain, contract, name) {
+async function fetchAlchemy(chain, item) {
   const key = process.env.ALCHEMY_API_KEY;
   if (!key) throw new Error("ALCHEMY_API_KEY env var required");
   const host = ALCHEMY_HOSTS[chain];
+  const name = item.name;
+  const contract = item.contract;
+  const slug = item.openseaSlug || null;
+
+  // OpenSea shared-storefront / slug collections: pull via collectionSlug
+  if (slug) {
+    const r = await fetch(
+      `https://${host}/nft/v3/${key}/getNFTsForCollection?collectionSlug=${encodeURIComponent(slug)}&withMetadata=true&limit=1`,
+    );
+    if (!r.ok) {
+      console.warn(`  ! ${chain} ${name} (slug:${slug}) → ${r.status}`);
+      return { id: slug, name, pfp: null, chain, contract, openseaSlug: slug };
+    }
+    const d = await r.json();
+    const n0 = d.nfts?.[0];
+    const os = n0?.contract?.openSeaMetadata || {};
+    const pfp =
+      os.imageUrl ||
+      n0?.image?.cachedUrl ||
+      n0?.image?.originalUrl ||
+      n0?.image?.thumbnailUrl ||
+      null;
+    return {
+      id: slug,
+      name, // keep curated name (Alchemy often returns Untitled Collection #…)
+      pfp,
+      chain,
+      contract: (n0?.contract?.address || contract || "").toLowerCase() || contract,
+      openseaSlug: slug,
+    };
+  }
 
   const r = await fetch(
     `https://${host}/nft/v3/${key}/getContractMetadata?contractAddress=${encodeURIComponent(contract)}`,
@@ -50,7 +81,7 @@ async function fetchAlchemy(chain, contract, name) {
     }
   }
 
-  return { id: c.address || contract, name: realName, pfp, chain };
+  return { id: c.address || contract, name, pfp, chain }; // curated name
 }
 
 async function fetchSolana(symbol, name) {
@@ -78,7 +109,7 @@ async function bake() {
   console.log("→ Ethereum");
   for (const it of ETHEREUM) {
     if (isPlaceholder(it)) continue;
-    const col = await fetchAlchemy("ethereum", it.contract, it.name);
+    const col = await fetchAlchemy("ethereum", it);
     out.ethereum.push(col);
     console.log(`  ✓ ${col.name}`);
     await sleep(150);
@@ -90,7 +121,7 @@ async function bake() {
       console.log(`  · skip placeholder: ${it.name}`);
       continue;
     }
-    const col = await fetchAlchemy("apechain", it.contract, it.name);
+    const col = await fetchAlchemy("apechain", it);
     out.apechain.push(col);
     console.log(`  ✓ ${col.name}`);
     await sleep(150);

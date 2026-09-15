@@ -123,28 +123,40 @@ async function alchemyCollection(env, chain, contract) {
   }));
 }
 
-async function tokensAlchemy(env, chain, contract, limit, pageKey) {
+function isContractAddress(id) {
+  return /^0x[a-fA-F0-9]{40}$/.test(String(id || ""));
+}
+
+async function tokensAlchemy(env, chain, collection, limit, pageKey) {
   const key = env.ALCHEMY_API_KEY;
   if (!key) return json({ error: "ALCHEMY_API_KEY not configured", tokens: [] }, 500);
   const host = ALCHEMY_HOSTS[chain];
+  const bySlug = !isContractAddress(collection);
   const params = new URLSearchParams({
-    contractAddress: contract,
     withMetadata: "true",
     limit: String(limit),
   });
+  if (bySlug) params.set("collectionSlug", collection);
+  else params.set("contractAddress", collection);
   if (pageKey) params.set("pageKey", pageKey);
-  const r = await fetch(`https://${host}/nft/v3/${key}/getNFTsForContract?${params}`, {
+
+  const path = bySlug ? "getNFTsForCollection" : "getNFTsForContract";
+  const r = await fetch(`https://${host}/nft/v3/${key}/${path}?${params}`, {
     headers: { accept: "application/json" },
   });
   if (!r.ok) return json({ error: "alchemy tokens failed", status: r.status, tokens: [] }, 502);
   const data = await r.json();
   const tokens = (data.nfts || [])
-    .map((n) => ({
-      id: `${contract}-${n.tokenId}`,
-      tokenId: n.tokenId,
-      name: n.name || null,
-      img: n.image?.cachedUrl || n.image?.originalUrl || n.image?.thumbnailUrl || null,
-    }))
+    .map((n) => {
+      const contract = (n.contract?.address || (bySlug ? null : collection) || "").toLowerCase() || null;
+      return {
+        id: `${contract || collection}-${n.tokenId}`,
+        tokenId: n.tokenId,
+        contract,
+        name: n.name || null,
+        img: n.image?.cachedUrl || n.image?.originalUrl || n.image?.thumbnailUrl || null,
+      };
+    })
     .filter((t) => t.img);
   return cached(json({
     tokens,

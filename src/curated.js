@@ -7,6 +7,11 @@ export const ETHEREUM = [
   { name: "Steezy Ape Gang",        contract: "0x70789e18a75611a9516d6251d650d096740a9e07" },
   { name: "HMN5",                   contract: "0x32fc5bcabc1f78308be11754493c49116c0fa35f" },
   { name: "Kushlings",              contract: "0xe25399c20ce2e4d03339bdae701138856696f8cf" },
+  {
+    name: "Bryan Vee Originals",
+    contract: "0x495f947276749ce646f68ac8c248420045cb7b5e",
+    openseaSlug: "bryan-vee-originals-1",
+  },
   { name: "Steezy Genesis",         contract: "0x83296c35ac338ed6c4ab7db1bb3d6ca90ae3b9c7" },
 ];
 
