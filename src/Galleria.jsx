@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import baked from "./data/collections.json";
 
-const PROXY = "/api/reservoir";
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const PAGE_SIZE = 60;
 
 const SOCIALS = [
   { handle: "@okinalabs", href: "https://x.com/okinalabs" },
@@ -18,55 +17,35 @@ function allCollections() {
   ].filter((c) => c.id && c.name);
 }
 
-function cacheGet(key) {
+/** Load baked token list from static JSON (public/tokens) — no Alchemy. */
+async function fetchBakedTokens(chain, collectionId) {
+  const id = String(collectionId || "").toLowerCase();
   try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return null;
-    const { t, v } = JSON.parse(raw);
-    if (Date.now() - t > CACHE_TTL_MS) return null;
-    return v;
-  } catch {
-    return null;
-  }
-}
-function cacheSet(key, v) {
-  try {
-    localStorage.setItem(key, JSON.stringify({ t: Date.now(), v }));
-  } catch {}
-}
-
-async function fetchTokens(chain, collectionId, limit = 60, pageKey = null) {
-  const k = `tok:${chain}:${collectionId}:${limit}:${pageKey || "first"}`;
-  const c = cacheGet(k);
-  if (c) return c;
-  try {
-    const params = new URLSearchParams({
-      collection: collectionId,
-      limit: String(limit),
-    });
-    if (pageKey) params.set("pageKey", pageKey);
-    const r = await fetch(`${PROXY}/${chain}/tokens?${params}`);
-    if (!r.ok) return { tokens: [], pageKey: null, totalSupply: null };
+    const r = await fetch(`/tokens/${chain}/${id}.json`);
+    if (!r.ok) {
+      // bryan-vee and similar may keep original case slug
+      if (id !== collectionId) {
+        const r2 = await fetch(`/tokens/${chain}/${collectionId}.json`);
+        if (!r2.ok) return [];
+        const d2 = await r2.json();
+        return Array.isArray(d2.tokens) ? d2.tokens : [];
+      }
+      return [];
+    }
     const data = await r.json();
-    const out = {
-      tokens: (data.tokens || []).filter((t) => t.img),
-      pageKey: data.pageKey || null,
-      totalSupply: data.totalSupply || null,
-    };
-    cacheSet(k, out);
-    return out;
+    return Array.isArray(data.tokens) ? data.tokens : [];
   } catch {
-    return { tokens: [], pageKey: null, totalSupply: null };
+    return [];
   }
 }
 
-function marketplaceUrl(chain, contract, tokenId) {
+function marketplaceUrl(chain, contract, tokenId, bakedOpenSea) {
+  if (bakedOpenSea) return bakedOpenSea;
   if (!contract || tokenId == null) return null;
   if (chain === "ethereum") return `https://opensea.io/assets/ethereum/${contract}/${tokenId}`;
   if (chain === "apechain") return `https://opensea.io/assets/ape_chain/${contract}/${tokenId}`;
   return null;
 }
-
 
 const SOUND_KEY = "okina-sound-on";
 const SOUND_SRC = "/okina-bg.mp3?v=3";
@@ -171,10 +150,9 @@ export default function Galleria() {
   const collections = useMemo(() => allCollections(), []);
   const names = useMemo(() => collections.map((c) => c.name), [collections]);
   const [active, setActive] = useState(null);
-  const [tokens, setTokens] = useState([]);
+  const [allTokens, setAllTokens] = useState([]);
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const [loading, setLoading] = useState(false);
-  const [pageKey, setPageKey] = useState(null);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [about, setAbout] = useState(false);
 
   useEffect(() => {
@@ -186,17 +164,17 @@ export default function Galleria() {
 
   useEffect(() => {
     if (!active) {
-      setTokens([]);
-      setPageKey(null);
+      setAllTokens([]);
+      setVisible(PAGE_SIZE);
       return;
     }
     let cancel = false;
     (async () => {
       setLoading(true);
-      const data = await fetchTokens(active.chain, active.id, 60);
+      setVisible(PAGE_SIZE);
+      const tokens = await fetchBakedTokens(active.chain, active.id);
       if (cancel) return;
-      setTokens(data.tokens || []);
-      setPageKey(data.pageKey || null);
+      setAllTokens(tokens);
       setLoading(false);
     })();
     return () => {
@@ -204,13 +182,11 @@ export default function Galleria() {
     };
   }, [active]);
 
-  async function loadMore() {
-    if (!active || !pageKey || loadingMore) return;
-    setLoadingMore(true);
-    const data = await fetchTokens(active.chain, active.id, 60, pageKey);
-    setTokens((prev) => [...prev, ...(data.tokens || [])]);
-    setPageKey(data.pageKey || null);
-    setLoadingMore(false);
+  const tokens = useMemo(() => allTokens.slice(0, visible), [allTokens, visible]);
+  const hasMore = visible < allTokens.length;
+
+  function loadMore() {
+    setVisible((v) => Math.min(v + PAGE_SIZE, allTokens.length));
   }
 
   return (
@@ -266,32 +242,38 @@ export default function Galleria() {
             {loading ? (
               <div className="stage-state">loading jpegs…</div>
             ) : tokens.length === 0 ? (
-              <div className="stage-state">no tokens yet — alchemy key may be missing on Pages</div>
+              <div className="stage-state">no baked tokens for this collection yet</div>
             ) : (
               <>
                 <div className="token-grid">
                   {tokens.map((tok) => {
-                    const href = marketplaceUrl(active.chain, tok.contract || active.contract || active.id, tok.tokenId);
+                    const href = marketplaceUrl(
+                      active.chain,
+                      tok.contract || active.contract || active.id,
+                      tok.tokenId,
+                      tok.opensea,
+                    );
                     const inner = (
                       <>
                         <ImgWithFallback src={tok.img} alt={tok.name || `#${tok.tokenId}`} className="token-img" />
                         <div className="token-cap">#{tok.tokenId}</div>
                       </>
                     );
+                    const key = tok.id || `${tok.contract || active.id}-${tok.tokenId}`;
                     return href ? (
-                      <a key={tok.id} className="token-card" href={href} target="_blank" rel="noreferrer">
+                      <a key={key} className="token-card" href={href} target="_blank" rel="noreferrer">
                         {inner}
                       </a>
                     ) : (
-                      <div key={tok.id} className="token-card">
+                      <div key={key} className="token-card">
                         {inner}
                       </div>
                     );
                   })}
                 </div>
-                {pageKey && (
-                  <button type="button" className="load-more" onClick={loadMore} disabled={loadingMore}>
-                    {loadingMore ? "loading…" : "load more"}
+                {hasMore && (
+                  <button type="button" className="load-more" onClick={loadMore}>
+                    load more ({Math.min(PAGE_SIZE, allTokens.length - visible)} of {allTokens.length - visible} left)
                   </button>
                 )}
               </>

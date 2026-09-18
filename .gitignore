@@ -5,3 +5,7 @@ dist/
 .netlify/
 .DS_Store
 *.log
+
+.bake-cache/
+node_modules/
+dist/
